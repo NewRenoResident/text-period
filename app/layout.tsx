@@ -29,7 +29,9 @@ export default function RootLayout({
               <Nav />
             </nav>
           </div>
-          <div className="flex-grow">{children}</div>
+          <div className="flex-grow border border-solid border-[#2f3336] border-r-2">
+            {children}
+          </div>
           <div className="w-32 hidden lg:block"></div>
         </div>
       </body>

@@ -10,9 +10,12 @@ interface SidebarItemProps {
 
 const NavItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, href }) => {
   return (
-    <div className="py-2  ">
-      <div className="rounded-full hover:cursor-pointer  hover: hover:bg-white hover:bg-opacity-10 p-4">
-        <Icon size={30} />
+    <div className="py-1  ">
+      <div className="rounded-full hover:cursor-pointer hover:bg-white hover:bg-opacity-10 p-2">
+        <div className="lg:flex lg:gap-4">
+          <Icon size={25} />
+          <p className="hidden lg:inline-block">{label}</p>
+        </div>
       </div>
     </div>
   );
