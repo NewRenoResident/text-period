@@ -21,11 +21,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <div className="flex">
-          <div className="">
-            <nav>
+    <html lang="en" className="h-screen ">
+      <body className={inter.className + "h-screen"}>
+        <div className="flex h-screen ">
+          <div className="h-full ">
+            <nav className="">
               <Nav />
             </nav>
           </div>
