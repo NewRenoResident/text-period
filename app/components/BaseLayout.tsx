@@ -1,5 +1,4 @@
 import { NextFont } from "next/dist/compiled/@next/font";
-
 const BaseLayout = ({
   children,
   inter,
