@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Nav from "@/components/Nav";
-import Modal from "@/components/Modal";
-import { useState } from "react";
+import BaseLayout from "./components/BaseLayout";
+import Login from "./components/Login";
+import Layout from "./components/Layout";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -22,23 +22,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [modalVisible, setModaVisible] = useState(false);
   return (
-    <html lang="en" className="h-screen ">
-      <body className={inter.className + "h-screen"}>
-        {modalVisible ? <Modal label="Test" /> : ""}
-        <div className="flex h-screen ">
-          <div className="h-full ">
-            <nav className="">
-              <Nav />
-            </nav>
-          </div>
-          <div className="flex-grow border border-solid border-[#2f3336] border-r-2">
-            {children}
-          </div>
-          <div className="w-32 hidden lg:block"></div>
-        </div>
-      </body>
-    </html>
+    <BaseLayout inter={inter}>
+      <Login>
+        <Layout>{children}</Layout>
+      </Login>
+    </BaseLayout>
   );
 }

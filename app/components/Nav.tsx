@@ -48,7 +48,7 @@ const Nav = () => {
   ];
   return (
     <div className=" flex flex-col px-[2vw] h-full">
-      <div className="rounded-full hover:cursor-pointer  hover:bg-white hover:bg-opacity-10 p-2">
+      <div className="rounded-full hover:cursor-pointer w-fit hover:bg-white hover:bg-opacity-10 p-2">
         <Image src={fav} alt="Picture of the author" width={25} height={25} />
       </div>
       {icons.map((item) => (
