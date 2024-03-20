@@ -1,8 +1,8 @@
-import CreateTweet from "@/app/components/CreateTweet";
-import Tweet from "@/app/components/Tweet/Tweet";
-import MainPageElement from "@/app/components/pages/MainPageElement";
+import CreateTweet from "@/components/CreateTweet";
+import Tweet from "../../Tweet/Tweet";
+import MainPageElement from "../MainPageElement";
 
-export default async function Home() {
+const Home = () => {
   return (
     <main>
       <div className="">
@@ -15,4 +15,6 @@ export default async function Home() {
       </div>
     </main>
   );
-}
+};
+
+export default Home;

@@ -1,8 +1,8 @@
 import { NextFont } from "next/dist/compiled/@next/font";
-import Nav from "./Nav";
+import Nav from "../Nav/Nav";
 import { Inter } from "next/font/google";
-import RightSidebar from "./RightSidebar/RightSidebar";
-import RightSidebarCard from "./RightSidebarCard/RightSidebarCard";
+import RightSidebar from "../RightSidebar/RightSidebar";
+import RightSidebarCard from "../RightSidebarCard/RightSidebarCard";
 const inter = Inter({ subsets: ["latin"] });
 
 interface LayoutI {

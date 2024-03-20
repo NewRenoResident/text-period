@@ -1,6 +1,7 @@
-import Button from "./Button";
+import CredentialsButton from "../Buttons/CredentialsButton/CredentialsButton";
+import GitButton from "../Buttons/GitButton/GitButton";
 
-const LoginWindow = () => {
+const Login = () => {
   return (
     <div className="flex flex-col h-screen ">
       <div className="flex-grow">
@@ -15,20 +16,9 @@ const LoginWindow = () => {
             <div>
               <h2 className="text-3xl font-bold">Присоединяйтесь сегодня</h2>
               <div>
-                <button className="bg-white text-black block px-10 mt-5 mb-4 rounded-3xl py-2">
-                  Войти гугл
-                </button>
-                <button>Войти</button>
-                <Button
-                  color="white"
-                  label="Зарегистрироваться с Apple ID"
-                ></Button>
-                <Button color="blue" label="Зарегистрироваться"></Button>
-                <p>
-                  Регистрируясь, вы соглашаетесь с Условиями предоставления
-                  услуг и Политикой конфиденциальности, а также с Политикой
-                  использования файлов cookie.
-                </p>
+                <GitButton />
+                <CredentialsButton type={"signIn"} />
+                <CredentialsButton type={"signUp"} />
               </div>
             </div>
             <div>
@@ -43,4 +33,4 @@ const LoginWindow = () => {
   );
 };
 
-export default LoginWindow;
+export default Login;

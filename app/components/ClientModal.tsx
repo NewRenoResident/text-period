@@ -2,11 +2,8 @@
 
 import { ReactNode, useState } from "react";
 
-interface Modal {
-  label: string;
-}
 
-const Modal: React.FC<Modal> = ({ label }) => {
+const Modal = ({ label }: { label: string }) => {
   const [diplayModal, setdisplayModal] = useState(true);
 
   const handleClose = () => {

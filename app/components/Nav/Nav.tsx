@@ -4,11 +4,12 @@ import { IoSearchSharp, IoNotifications } from "react-icons/io5";
 import { BiMessage } from "react-icons/bi";
 import { MdAccountCircle } from "react-icons/md";
 import { CiLogout } from "react-icons/ci";
-import NavItem from "./NavItem";
 import { IconType } from "react-icons";
 import Image from "next/image";
 import white from "/public/white.svg";
+import NavItem from "./NavItem";
 import fav from "/public/favicon-32x32.png";
+import { signOut } from "next-auth/react";
 interface NavI {
   icon: IconType;
   label: string;
@@ -42,11 +43,6 @@ const Nav = () => {
       label: "Profile",
       href: "/profile",
     },
-    {
-      icon: CiLogout,
-      label: "Logout",
-      href: "/logout",
-    },
   ];
   return (
     <div className=" flex flex-col px-[2vw] h-full lg:ml-[4vw] ">
@@ -61,6 +57,7 @@ const Nav = () => {
           href={item.href}
         />
       ))}
+      <NavItem icon={CiLogout} label={"Logout"} signOut={signOut} />
     </div>
   );
 };

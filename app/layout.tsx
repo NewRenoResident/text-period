@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
-import BaseLayout from "../components/BaseLayout";
-import HomeLayout from "../components/HomeLayout";
 const inter = Inter({ subsets: ["latin"] });
-import "../globals.css";
+import "./globals.css";
+import BaseLayout from "./components/BaseLayout";
+import Providers from "./Prorviders";
 export const metadata: Metadata = {
   title: "Text Period",
   description: "Login Page",

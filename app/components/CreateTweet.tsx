@@ -7,13 +7,13 @@ const CreateTweet = () => {
         <Image alt="user-picture" width={60} height={60} src={white} />
         <input
           type="text"
-          className="bg-black text-xl"
+          className="bg-inherit text-xl p-2 focus:border-none focus:outline-none"
           placeholder="What's happening?!"
         />
       </div>
       <div className="flex justify-between">
         <div className="ml-8">Icons</div>
-        <button className="bg-[#0f4e78] rounded-2xl py-1 px-4 mr-8 mb-3">
+        <button className="bg-[#0f4e78] rounded-2xl py-1 px-4 mr-8 mb-3 font-bold text-gray-400">
           Опубликовать пост
         </button>
       </div>
