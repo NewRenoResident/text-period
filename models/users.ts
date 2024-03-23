@@ -11,6 +11,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
       bio: { type: String, max: 500 },
       location: { type: String },
     },
+    img: { type: String },
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },

@@ -1,0 +1,10 @@
+{
+  "elements": {
+    "buttons": {
+      "colors": {
+        "white": { "bg": "white", "text": "black" },
+        "blue": { "bg": "#1d9bf0", "text": "white" }
+      }
+    }
+  }
+}

@@ -1,6 +1,8 @@
+import { signIn } from "@/lib/auth";
 import CredentialsButton from "../Buttons/CredentialsButton/CredentialsButton";
 import GitButton from "../Buttons/GitButton/GitButton";
-
+import TextPeriodButton from "../Buttons/TextPeriodButton/TextPeriodButton";
+import { goToLoginPage, goToRegisterPage, register } from "@/lib/serverActions";
 const Login = () => {
   return (
     <div className="flex flex-col h-screen ">
@@ -17,8 +19,16 @@ const Login = () => {
               <h2 className="text-3xl font-bold">Присоединяйтесь сегодня</h2>
               <div>
                 <GitButton />
-                <CredentialsButton type={"signIn"} />
-                <CredentialsButton type={"signUp"} />
+                <TextPeriodButton
+                  action={goToRegisterPage}
+                  label="Зарегистрироваться"
+                  color="blue"
+                />
+                <TextPeriodButton
+                  action={goToLoginPage}
+                  label="Войти"
+                  color="blue"
+                />
               </div>
             </div>
             <div>

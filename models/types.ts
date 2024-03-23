@@ -9,6 +9,7 @@ export interface IUser extends Document {
     bio?: string;
     location?: string;
   };
+  img?: string;
   followers: IUser["_id"][];
   following: IUser["_id"][];
 }

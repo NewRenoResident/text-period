@@ -2,8 +2,8 @@ import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
 import github from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
 import { connectToDb } from "./utils";
+import { hash, compare } from "bcryptjs";
 import { User } from "@/models/users";
 import { IUser } from "@/models/types";
 
@@ -12,7 +12,7 @@ const login = async (credentials: any) => {
     connectToDb();
     const user: IUser | null = await User.findOne({ email: credentials.email });
     if (!user || !user.passwordHash) throw new Error("Wrong credentials!");
-    const isPasswordCorrect = await bcrypt.compare(
+    const isPasswordCorrect = await compare(
       credentials.password,
       user.passwordHash
     );
@@ -26,7 +26,7 @@ const login = async (credentials: any) => {
 };
 
 const credentialsConfig = CredentialsProvider({
-  name: "Credentials",
+  name: "credentials",
   credentials: {
     email: {
       label: "Email",
