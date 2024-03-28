@@ -12,7 +12,7 @@ interface LayoutI {
 const HomeLayout: React.FC<LayoutI> = ({ children }) => {
   return (
     <div className="flex h-screen ">
-      <div className="h-full ">
+      <div className="h-full w-1/2">
         <nav>
           <Nav />
         </nav>
@@ -22,7 +22,7 @@ const HomeLayout: React.FC<LayoutI> = ({ children }) => {
       </div>
       <div className="min-w-32 hidden lg:block">
         <RightSidebar>
-          <RightSidebarCard label={"Кого почитать"} content={"Test"} />
+          <RightSidebarCard label={"Кого почитать"} />
         </RightSidebar>
       </div>
     </div>

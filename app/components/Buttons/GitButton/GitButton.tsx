@@ -12,7 +12,7 @@ const GitButton = async () => {
       >
         <button
           type="submit"
-          className="bg-gray-800 text-white cursor-pointer border-none w-72 gap-2 items-center px-4 py-2 rounded-3xl flex"
+          className="bg-gray-800 text-white cursor-pointer border-none w-64 gap-2 items-center px-4 py-2 rounded-3xl flex"
         >
           <Image src={github_white} alt="github image" width={22} height={24} />
           <div>Sign in with GitHub</div>

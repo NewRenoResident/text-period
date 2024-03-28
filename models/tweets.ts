@@ -15,5 +15,5 @@ const tweetSchema: Schema<ITweet> = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Tweets: Model<ITweet> =
+export const Tweet: Model<ITweet> =
   mongoose.models?.Tweet || mongoose.model<ITweet>("Tweet", tweetSchema);

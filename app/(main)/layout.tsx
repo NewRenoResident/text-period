@@ -1,11 +1,11 @@
-// root layout for all pages
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import BaseLayout from "../components/BaseLayout";
 import HomeLayout from "../components/pages/HomeLayout";
 import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { useUserStore } from "@/store";
+import InitializeUserStore from "../components/InitializeUserStore";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,10 +24,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-  if (!session?.user) {
-    redirect("/");
-  }
   return (
     <BaseLayout inter={inter}>
       <HomeLayout>{children}</HomeLayout>

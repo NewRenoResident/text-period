@@ -1,11 +1,9 @@
 import { redirect } from "next/navigation";
-import Login from "./components/pages/Login";
+import Login from "./components/pages/Login/Login";
 import { auth } from "@/lib/auth";
 const Page = async () => {
-  const session = await auth();
-  console.log(session);
-
-  if (session?.user) {
+  const user = await auth();
+  if (user) {
     redirect("/home");
   }
   return (

@@ -6,6 +6,7 @@ import { connectToDb } from "./utils";
 import { hash, compare } from "bcryptjs";
 import { User } from "@/models/users";
 import { IUser } from "@/models/types";
+import { authConfig } from "@/auth.config";
 
 const login = async (credentials: any) => {
   try {
@@ -25,36 +26,40 @@ const login = async (credentials: any) => {
   }
 };
 
-const credentialsConfig = CredentialsProvider({
-  name: "credentials",
-  credentials: {
-    email: {
-      label: "Email",
-    },
-    password: {
-      label: "Password",
-      type: "password",
-    },
-  },
-  async authorize(credentials) {
-    try {
-      const user = await login(credentials);
-      return user;
-    } catch (err) {
-      return null;
-    }
-  },
-});
-
-const config = {
-  providers: [github],
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
+  providers: [
+    github({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+    }),
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: {
+          label: "Email",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+        },
+      },
+      async authorize(credentials) {
+        try {
+          const user = await login(credentials);
+          return user;
+        } catch (err) {
+          return null;
+        }
+      },
+    }),
+  ],
   callbacks: {
-    async signIn({ account, profile }) {
+    async signIn({ user, account, profile }) {
       if (account?.provider === "github") {
         connectToDb();
         try {
           const user = await User.findOne({ email: profile?.email });
-
           if (!user) {
             const newUser = new User({
               username: profile?.login,
@@ -71,7 +76,6 @@ const config = {
       }
       return true;
     },
+    ...authConfig.callbacks,
   },
-} satisfies NextAuthConfig;
-
-export const { handlers, auth, signIn, signOut } = NextAuth(config);
+});
