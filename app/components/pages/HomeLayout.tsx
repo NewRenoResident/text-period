@@ -12,7 +12,7 @@ interface LayoutI {
 const HomeLayout: React.FC<LayoutI> = ({ children }) => {
   return (
     <div className="flex h-screen ">
-      <div className="h-full w-1/2">
+      <div className="h-full">
         <nav>
           <Nav />
         </nav>

@@ -1,5 +1,6 @@
 import CreateTweet from "@/app/components/CreateTweet";
 import Tweet from "@/app/components/Tweet/Tweet";
+import Tweets from "@/app/components/Tweets/Tweets";
 import MainPageElement from "@/app/components/pages/MainPageElement";
 import { auth } from "@/lib/auth";
 import { getUserByEmail } from "@/lib/data";
@@ -18,6 +19,9 @@ const getData = async () => {
 };
 
 export default async function Home() {
+  const tweetsFetch = await fetch("http://localhost:3000/api/tweet");
+  const tweets = await tweetsFetch.json();
+
   const getSession = async () => {
     const session = await auth();
 
@@ -28,7 +32,6 @@ export default async function Home() {
   };
 
   const session = await getSession();
-  console.log(session);
   session?.user;
   return (
     <main>
@@ -36,9 +39,7 @@ export default async function Home() {
         <MainPageElement>
           <CreateTweet />
         </MainPageElement>
-        <MainPageElement>
-          <Tweet tweet_id="123" />
-        </MainPageElement>
+        <Tweets />
       </div>
     </main>
   );

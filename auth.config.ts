@@ -11,7 +11,6 @@ export const authConfig = {
     async jwt({ token, user, account, profile, trigger }) {
       if (user) {
         if (account?.provider === "github") {
-          console.log("EMAIL" + user.email);
           const res = await User.findOne({ email: user?.email });
           token.id = res?.id;
         } else {

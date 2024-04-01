@@ -10,7 +10,6 @@ import { redirect } from "next/navigation";
 export const setUserStoreData = async () => {
   "use server";
   const { user, setUserId } = useUserStore();
-  console.log("USER" + user);
   return [user, setUserId];
 };
 
@@ -60,7 +59,6 @@ export const register = async (previousState, formData: FormData) => {
   try {
     connectToDb();
     const user = await User.findOne({ email });
-    console.log(user);
 
     if (user) {
       return { error: "Username already exists" };
