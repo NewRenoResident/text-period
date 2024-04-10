@@ -4,12 +4,17 @@ export interface IUser extends Document {
   username: string;
   email: string;
   passwordHash?: string;
+  wallpaperImg?: string | undefined;
   profileInfo: {
     fullName: string;
     bio?: string;
     location?: string;
+    website?: string;
+    dateOfBirth: string;
   };
-  img?: string;
+  img?: string | undefined;
+  createdAt: Date;
+  updatedAt: Date;
   followers: IUser["_id"][];
   following: IUser["_id"][];
 }

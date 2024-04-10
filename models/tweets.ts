@@ -12,7 +12,7 @@ const tweetSchema: Schema<ITweet> = new mongoose.Schema(
     likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     retweets: [{ type: Schema.Types.ObjectId, ref: "Tweet" }],
   },
-  { timestamps: true }
+  { timestamps: true, required: true }
 );
 
 export const Tweet: Model<ITweet> =

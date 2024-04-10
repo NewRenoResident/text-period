@@ -25,9 +25,9 @@ const NavItem: React.FC<SidebarItemProps> = ({
         <Link href={href} prefetch={false}>
           <div className="py-1  ">
             <div className="rounded-full hover:cursor-pointer hover:bg-white hover:bg-opacity-10 p-2">
-              <div className="lg:flex lg:gap-4">
+              <div className="md:flex md:gap-4">
                 <Icon size={25} />
-                <p className="hidden lg:inline-block">{label}</p>
+                <p className="hidden md:inline-block">{label}</p>
               </div>
             </div>
           </div>

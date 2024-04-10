@@ -3,9 +3,12 @@ import { User } from "@/models/users";
 import { signIn } from "./auth";
 import { connectToDb } from "./utils";
 import bcrypt from "bcryptjs";
-import { IUser } from "@/models/types";
 import { useUserStore } from "@/store";
 import { redirect } from "next/navigation";
+import { writeFile } from "fs/promises";
+import path from "path";
+import { IUser } from "@/models/types";
+import { Tweet } from "@/models/tweets";
 
 export const setUserStoreData = async () => {
   "use server";
@@ -96,4 +99,97 @@ export const login = async (formData) => {
 export const handleLogin = async () => {
   "use server";
   await signIn();
+};
+
+type FormDataEntries = {
+  wallpaperFile: File;
+  userPicFile: File;
+  name: string;
+  about: string;
+  location: string;
+  website: string;
+  birthday: string;
+};
+
+const writeFileToDisk = async (image: File) => {
+  const buffer = Buffer.from(await image.arrayBuffer());
+  const filename = Date.now() + image.name.replaceAll(" ", "_");
+  try {
+    let flpath = path.join(process.cwd(), "public/uploads/" + filename);
+    await writeFile(
+      path.join(process.cwd(), "public/uploads/" + filename),
+      buffer
+    );
+    return filename;
+  } catch (error) {
+    return { error: "Something went wrong" };
+  }
+};
+
+export const updateUser = async (userId: string, formData: FormData) => {
+  "use server";
+  const {
+    wallpaperFile,
+    userPicFile,
+    name,
+    about,
+    location,
+    website,
+    birthday,
+  } = Object.fromEntries(formData) as FormDataEntries;
+  connectToDb();
+
+  const wallpaperImagePath =
+    wallpaperFile.name !== "undefined" &&
+    (await writeFileToDisk(wallpaperFile));
+  const userImagePath =
+    userPicFile.name !== "undefined" && (await writeFileToDisk(userPicFile));
+  const user = await User.findOneAndUpdate(
+    { _id: userId },
+    {
+      profileInfo: {
+        fullName: name,
+        bio: about,
+        location: location,
+        website,
+        dateOfBirth: birthday,
+      },
+      wallpaperImg: wallpaperImagePath || undefined,
+      img: userImagePath || undefined,
+    } as IUser,
+    { new: true }
+  );
+
+  const userJson = JSON.stringify(user);
+
+  return userJson;
+};
+
+export const loadUser = async (userId: string) => {
+  "use server";
+  try {
+    connectToDb();
+    const user = await User.findOne({ _id: userId }).select("-passwordHash");
+    const userJSON = JSON.stringify(user);
+
+    return { user: userJSON };
+  } catch (error) {
+    return { error: "Something went wrong" };
+  }
+};
+
+export const getUserTweetsCount = async (userId: string) => {
+  "use server";
+  try {
+    connectToDb();
+    const tweets = await Tweet.find({ authorId: userId }).sort({
+      createdAt: -1,
+    });
+    let len = "" + tweets.length;
+    console.log(len);
+
+    return { count: len };
+  } catch (error) {
+    return { error: "Something went wrong" };
+  }
 };
