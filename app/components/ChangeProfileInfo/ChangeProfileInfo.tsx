@@ -16,10 +16,11 @@ const fullScreenStyle = {
 };
 
 const ChangeProfileInfo = ({
-  formDefaultData,
+  user,
   userId,
   setUser,
 }: {
+  user: IUser | null;
   userId: string;
   setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
 }) => {
@@ -33,8 +34,20 @@ const ChangeProfileInfo = ({
   };
 
   const formSubmitHandler = (e: React.FormEvent) => {
-    if (!e.target.name.value) {
-      e.target.name.value;
+    const formElements = e.target?.elements;
+
+    for (let i = 0; i < formElements.length; i++) {
+      const element = formElements[i];
+
+      if (
+        element.tagName === "INPUT" &&
+        element.name &&
+        element.type !== "file"
+      ) {
+        const value = element?.value || user?.profileInfo[element.name] || "";
+
+        element.value = value;
+      }
     }
     setIsOpen(false);
   };
@@ -68,7 +81,7 @@ const ChangeProfileInfo = ({
               onSubmit={formSubmitHandler}
               action={handleUpdateUserWithId}
             >
-              <ChangeProfileInfoFormData formDefaultData={formDefaultData} />
+              <ChangeProfileInfoFormData />
             </form>
           </div>
         </div>

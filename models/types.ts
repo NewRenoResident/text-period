@@ -21,8 +21,8 @@ export interface IUser extends Document {
 
 export interface ITweet extends Document {
   authorId: IUser["_id"];
-  content: string;
-  img?: string;
-  likes: IUser["_id"][];
-  retweets: ITweet["_id"][];
+  content: string | null;
+  img?: string | null;
+  likes: IUser["_id"][] | null;
+  retweets: ITweet["_id"][] | null;
 }

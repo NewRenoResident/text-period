@@ -1,10 +1,28 @@
 import Image from "next/image";
 import white from "/public/white.svg";
-const CreateTweet = () => {
+import { IUser } from "@/models/types";
+
+interface Props {
+  userImage: string | undefined;
+}
+
+const CreateTweet = ({ userImage }: Props) => {
   return (
     <form className="w-full " action="">
       <div className="flex mb-4">
-        <Image alt="user-picture" width={60} height={60} src={white} />
+        <div className="w-20 h-20 bg-white rounded-full relative">
+          {userImage ? (
+            <Image
+              alt=""
+              src={`/uploads/${userImage}`}
+              fill
+              sizes="1"
+              className="object-cover rounded-full"
+            />
+          ) : (
+            <Image alt="user-picture" width={60} height={60} src={white} />
+          )}
+        </div>
         <input
           type="text"
           className="bg-inherit text-xl p-2 focus:border-none focus:outline-none"

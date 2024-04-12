@@ -6,16 +6,17 @@ import ky from "ky";
 import Tweet from "../Tweet/Tweet";
 import { APIResponse } from "./types";
 import { auth } from "@/lib/auth";
+import { useTweetsStore } from "@/app/store/tweets";
 
-const Tweets = ({
-  numberOfTweetsToFetch = 5,
-  userId,
-}: {
+interface Props {
   numberOfTweetsToFetch?: number;
   userId?: string;
-}) => {
+}
+
+const Tweets = ({ numberOfTweetsToFetch = 5, userId }: Props) => {
   const [ref, inView] = useInView();
-  const [tweets, setTweets] = useState<Tweet[]>([]);
+  const { tweets, updateTweets } = useTweetsStore();
+  // const [tweets, setTweets] = useState<any>([]);
   const [offset, setOffset] = useState(numberOfTweetsToFetch);
   const [empty, setEmpty] = useState(false);
 
@@ -26,8 +27,9 @@ const Tweets = ({
           `http://localhost:3000/api/tweet?offset=${offset}&limit=${numberOfTweetsToFetch}`
         )
         .json();
-      setTweets((prev) => [...prev, ...apiTweets.tweets]);
-      setOffset(offset + numberOfTweetsToFetch);
+
+      updateTweets(apiTweets.tweets);
+      setOffset((prevOffset) => prevOffset + numberOfTweetsToFetch);
     } else {
       const apiTweets: APIResponse = await ky
         .get(`http://localhost:3000/api/tweet?userId=${userId}`)
@@ -36,7 +38,7 @@ const Tweets = ({
       if (apiTweets.tweets.length === 0) {
         setEmpty(true);
       } else {
-        setTweets((prev) => [...prev, ...apiTweets.tweets]);
+        updateTweets(apiTweets.tweets);
         setOffset(offset + numberOfTweetsToFetch);
       }
     }
@@ -51,9 +53,11 @@ const Tweets = ({
   return (
     <div className={`w-full flex-col justify-center items-center`}>
       {tweets.map((tweet) => (
-        <MainPageElement>
-          <Tweet tweet={tweet} />
-        </MainPageElement>
+        <div key={tweet._id}>
+          <MainPageElement>
+            <Tweet tweet={tweet} />
+          </MainPageElement>
+        </div>
       ))}
 
       {empty ? (

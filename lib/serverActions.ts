@@ -131,13 +131,14 @@ export const updateUser = async (userId: string, formData: FormData) => {
   const {
     wallpaperFile,
     userPicFile,
-    name,
+    fullName,
     about,
     location,
     website,
-    birthday,
+    dateOfBirthday,
   } = Object.fromEntries(formData) as FormDataEntries;
   connectToDb();
+  console.log(Object.fromEntries(formData));
 
   const wallpaperImagePath =
     wallpaperFile.name !== "undefined" &&
@@ -148,11 +149,11 @@ export const updateUser = async (userId: string, formData: FormData) => {
     { _id: userId },
     {
       profileInfo: {
-        fullName: name,
+        fullName: fullName,
         bio: about,
         location: location,
         website,
-        dateOfBirth: birthday,
+        dateOfBirth: dateOfBirthday,
       },
       wallpaperImg: wallpaperImagePath || undefined,
       img: userImagePath || undefined,

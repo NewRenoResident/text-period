@@ -12,14 +12,9 @@ interface IFormDefaultDate {
   dateOfBirth?: string;
 }
 
-export const ChangeProfileInfoFormData = ({
-  formDefaultData,
-}: {
-  formDefaultData: IFormDefaultDate;
-}) => {
+export const ChangeProfileInfoFormData = ({}: {}) => {
   const [wallpaperURL, setWallpaperURL] = useState("");
   const [userPicURL, setUserPicURL] = useState("");
-  const [name, setName] = useState("");
   const cleanupFunctionRef = useRef(() => {});
 
   const wallpaperInputRef = useRef<HTMLInputElement>(null);
@@ -113,7 +108,7 @@ export const ChangeProfileInfoFormData = ({
           </label>
           <input
             type="text"
-            name="name"
+            name="fullName"
             className="placeholder:text-opacity-20 placeholder:text-white focus:border-cyan-600 focus:border-2 outline-none shadow appearance-none border border-solid rounded w-full py-2 px-3 text-grey-darker bg-black border-white border-opacity-40 text-white"
             placeholder="Знаменитый литовский философ"
           />
@@ -168,7 +163,7 @@ export const ChangeProfileInfoFormData = ({
         </label>
         <input
           type="date"
-          name="birthday"
+          name="dateOfBirthday"
           className="focus:border-cyan-600 focus:border-2 outline-none border border-solid border-white border-opacity-40 shadow appearance-none  rounded w-full py-2 px-3 text-grey-darker bg-black  text-white"
           placeholder="26.12.1991"
         />

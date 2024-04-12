@@ -35,14 +35,17 @@ function UserProfileCard({ userId }: { userId: string }) {
     <div>
       <UserHeader username={user.username} tweetsCount={tweets} />
       <div className="container relative grid grid-rows-[65%_35%] h-64">
-        <div className="w-full bg-[#333639]"></div>
+        <div className="w-full bg-[#333639]">
+          <Image
+            src={`/uploads/${user.wallpaperImg}`}
+            alt="user wallpaper"
+            layout="fill"
+            className="object-cover"
+          />
+        </div>
         <div className="w-full h-[15vh]">
           <div className="p-4 flex flex-row-reverse justify-between">
-            <ChangeProfileInfo
-              setUser={setUser}
-              formDefaultData={user?.profileInfo}
-              userId={userId}
-            />
+            <ChangeProfileInfo setUser={setUser} user={user} userId={userId} />
           </div>
         </div>
         <div
