@@ -3,18 +3,13 @@ import { User } from "@/models/users";
 import { signIn } from "./auth";
 import { connectToDb } from "./utils";
 import bcrypt from "bcryptjs";
-import { useUserStore } from "@/store";
 import { redirect } from "next/navigation";
 import { writeFile } from "fs/promises";
 import path from "path";
 import { IUser } from "@/models/types";
 import { Tweet } from "@/models/tweets";
-
-export const setUserStoreData = async () => {
-  "use server";
-  const { user, setUserId } = useUserStore();
-  return [user, setUserId];
-};
+import { Tweet as ITweet } from "@/app/components/Tweets/types";
+import email from "next-auth/providers/email";
 
 export const getUserByEmail = async (
   email: string
@@ -192,5 +187,84 @@ export const getUserTweetsCount = async (userId: string) => {
     return { count: len };
   } catch (error) {
     return { error: "Something went wrong" };
+  }
+};
+
+export const createTweet = async (userId: string, formData: FormData) => {
+  "use server";
+  try {
+    connectToDb();
+    const { content } = Object.fromEntries(formData);
+
+    const newTweet = new Tweet({
+      authorId: userId,
+      content: content,
+      likes: [],
+      retweets: [],
+    });
+    const result = await newTweet.save();
+    const author = await User.findOne({ _id: result.authorId });
+
+    return {
+      tweet: {
+        authorId: {
+          username: author?.username,
+          email: author?.email,
+          wallpaperImg: author?.wallpaperImg,
+          _id: author?._id,
+          profileInfo: {
+            fullName: author?.profileInfo.fullName,
+            bio: author?.profileInfo.bio,
+            location: author?.profileInfo.location,
+            website: author?.profileInfo.website,
+            dateOfBirth: author?.profileInfo.dateOfBirth,
+          },
+          img: author?.img,
+          followers: author?.followers,
+          following: author?.following,
+        },
+        content: result.content,
+        likes: result.likes,
+        retweets: result.retweets,
+        _id: "" + result._id,
+        createdAt: result.createdAt.toISOString(),
+        updatedAt: result.updatedAt.toISOString(),
+      },
+    };
+  } catch (error) {
+    return {
+      error: "Error creating tweet",
+    };
+  }
+};
+
+export const deleteTweetById = async (tweetId: string) => {
+  "use server";
+  connectToDb();
+  const res = await Tweet.deleteOne({ _id: tweetId });
+  return { result: res };
+};
+
+export const getTweetById = async (tweetId: string) => {
+  "use server";
+  connectToDb();
+  const tweet = await Tweet.findOne({ _id: tweetId }).populate({
+    path: "authorId",
+    select: "-passwordHash",
+  });
+
+  if (tweet) {
+    const { _id, authorId, __v, ...preSimpleTweet } = tweet._doc;
+    const simpleTweet = {
+      _id: "" + _id,
+      authorId: {
+        _id: authorId?.id,
+        username: authorId?.username,
+        email: authorId?.email,
+      },
+      ...preSimpleTweet,
+    };
+
+    return { tweet: simpleTweet };
   }
 };

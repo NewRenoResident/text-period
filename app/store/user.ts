@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-// Определяем тип для пользователя
 type User = {
   fullName: string;
 };

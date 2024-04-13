@@ -11,37 +11,31 @@ import { useTweetsStore } from "@/app/store/tweets";
 interface Props {
   numberOfTweetsToFetch?: number;
   userId?: string;
+  sessionUserId: string;
 }
 
-const Tweets = ({ numberOfTweetsToFetch = 5, userId }: Props) => {
+const Tweets = ({
+  numberOfTweetsToFetch = 5,
+  userId,
+  sessionUserId,
+}: Props) => {
   const [ref, inView] = useInView();
-  const { tweets, updateTweets } = useTweetsStore();
-  // const [tweets, setTweets] = useState<any>([]);
-  const [offset, setOffset] = useState(numberOfTweetsToFetch);
+  const { tweets, userTweets, updateTweets, updateUserTweets } =
+    useTweetsStore();
+  const [offset, setOffset] = useState(0);
   const [empty, setEmpty] = useState(false);
-
   const loadMoreTweets = async () => {
+    const apiTweets: APIResponse = await ky
+      .get(
+        `http://localhost:3000/api/tweet?offset=${offset}&limit=${numberOfTweetsToFetch}&userId=${userId}`
+      )
+      .json();
     if (!userId) {
-      const apiTweets: APIResponse = await ky
-        .get(
-          `http://localhost:3000/api/tweet?offset=${offset}&limit=${numberOfTweetsToFetch}`
-        )
-        .json();
-
       updateTweets(apiTweets.tweets);
-      setOffset((prevOffset) => prevOffset + numberOfTweetsToFetch);
     } else {
-      const apiTweets: APIResponse = await ky
-        .get(`http://localhost:3000/api/tweet?userId=${userId}`)
-        .json();
-
-      if (apiTweets.tweets.length === 0) {
-        setEmpty(true);
-      } else {
-        updateTweets(apiTweets.tweets);
-        setOffset(offset + numberOfTweetsToFetch);
-      }
+      updateUserTweets(apiTweets.tweets);
     }
+    setOffset((prevOffset) => prevOffset + numberOfTweetsToFetch);
   };
 
   useEffect(() => {
@@ -52,16 +46,16 @@ const Tweets = ({ numberOfTweetsToFetch = 5, userId }: Props) => {
 
   return (
     <div className={`w-full flex-col justify-center items-center`}>
-      {tweets.map((tweet) => (
+      {(userId ? userTweets : tweets).map((tweet) => (
         <div key={tweet._id}>
           <MainPageElement>
-            <Tweet tweet={tweet} />
+            <Tweet tweet={tweet} sessionUserId={sessionUserId} />
           </MainPageElement>
         </div>
       ))}
 
       {empty ? (
-        <div className="mx-auto w-fit p-10">No tweets </div>
+        <div className="mx-auto w-fit p-10">No tweets</div>
       ) : (
         <div className="m-auto w-fit" ref={ref}>
           Loading...

@@ -53,15 +53,15 @@ const ChangeProfileInfo = ({
   };
 
   return (
-    <div>
+    <div className="absolute p-4 bottom-5 right-5 ">
       {isOpen && (
         <div
           className="bg-blue-300 bg-opacity-20 justify-center items-center "
           style={fullScreenStyle as React.CSSProperties}
         >
           <div className="md:w-3/6 md:h-5/6 w-full h-full rounded-xl bg-black p-4 overflow-auto">
-            <div className="flex justify-between mb-2">
-              <div className="flex justify-center items-center gap-8">
+            <div className="flex justify-between mb-2 ">
+              <div className="flex justify-center items-center gap-8 ">
                 <button onClick={() => setIsOpen(false)}>
                   <IoMdClose size={25} />
                 </button>
@@ -88,7 +88,7 @@ const ChangeProfileInfo = ({
       )}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="hover:bg-white hover:bg-opacity-10 border border-white  border-solid rounded-3xl border-opacity-50 py-1 px-3"
+        className=" hover:bg-white hover:bg-opacity-10  border border-white  border-solid rounded-3xl border-opacity-50 py-1 px-3"
       >
         Изменить профиль
       </button>

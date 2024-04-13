@@ -42,11 +42,10 @@ function UserProfileCard({ userId }: { userId: string }) {
             layout="fill"
             className="object-cover"
           />
+          <ChangeProfileInfo setUser={setUser} user={user} userId={userId} />
         </div>
         <div className="w-full h-[15vh]">
-          <div className="p-4 flex flex-row-reverse justify-between">
-            <ChangeProfileInfo setUser={setUser} user={user} userId={userId} />
-          </div>
+          <div className="p-4 flex flex-row-reverse justify-between"></div>
         </div>
         <div
           style={{

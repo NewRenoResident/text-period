@@ -17,7 +17,7 @@ export default async function Home() {
   return (
     <main>
       <div>
-        <HomeComponent userImage={user?.img} />
+        <HomeComponent userId={"" + user?._id} userImage={user?.img} />
       </div>
     </main>
   );

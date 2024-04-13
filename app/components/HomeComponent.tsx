@@ -7,15 +7,16 @@ import { useEffect, useState } from "react";
 
 interface Props {
   userImage: string | undefined;
+  userId: string;
 }
 
-const HomeComponent = ({ userImage }: Props) => {
+const HomeComponent = ({ userImage, userId }: Props) => {
   return (
     <>
       <MainPageElement>
-        <CreateTweet userImage={userImage} />
+        <CreateTweet userId={userId} userImage={userImage} />
       </MainPageElement>
-      <Tweets />
+      <Tweets sessionUserId={userId} />
     </>
   );
 };

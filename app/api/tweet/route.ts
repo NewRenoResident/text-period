@@ -35,22 +35,23 @@ export const POST = async (request: Request, context: any) => {
 };
 export const GET = async (request: NextRequest) => {
   try {
-    connectToDb();
+    await connectToDb();
     const searchParams = request.nextUrl.searchParams;
-    const offset = parseInt(searchParams.get("offset") || "0", 10);
-    const limit = parseInt(searchParams.get("limit") || "10", 10);
+    const offset = searchParams.get("offset");
+    const limit = searchParams.get("limit");
     const userId = searchParams.get("userId");
     let count = searchParams.get("count");
     const countBool = count?.toLowerCase() === "true";
-
-    const tweets = await Tweet.find(userId ? { authorId: userId } : {})
+    const tweets = await Tweet.find(
+      userId !== "undefined" ? { authorId: userId } : {}
+    )
+      .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
       .populate({
         path: "authorId",
         select: "-passwordHash",
-      })
-      .sort({ createdAt: -1 });
+      });
 
     if (countBool) {
       return NextResponse.json({ count: tweets.length }, { status: 200 });
