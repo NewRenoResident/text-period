@@ -11,6 +11,7 @@ interface Props {
 }
 
 const HomeComponent = ({ userImage, userId }: Props) => {
+  const [offset, setOffset] = useState(0);
   return (
     <>
       <MainPageElement>

@@ -16,7 +16,7 @@ interface Props {
 const Tweet = ({ tweet, sessionUserId }: Props) => {
   const router = useRouter();
   const { deleteById } = useTweetsStore();
-
+  const { addStepToOffset } = useTweetsStore();
   const handleClick = (tweet_id: string) => {
     router.push(`/home/${tweet_id}`);
   };
@@ -24,6 +24,7 @@ const Tweet = ({ tweet, sessionUserId }: Props) => {
   const handleDelete = async (e) => {
     const res = await deleteTweetById(tweet._id);
     deleteById(tweet._id);
+    addStepToOffset(-1);
   };
 
   const calculateDateDifference = (date: string) => {
@@ -62,7 +63,6 @@ const Tweet = ({ tweet, sessionUserId }: Props) => {
               height={50}
             />
           </div>
-
           <div>
             <div className="flex justify-start items-center gap-2">
               <h2 className="font-bold">{tweet?.authorId?.username}</h2>
@@ -82,6 +82,9 @@ const Tweet = ({ tweet, sessionUserId }: Props) => {
             <TweetBottom
               ownsToUser={"" + sessionUserId === "" + tweet.authorId._id}
               onDelete={handleDelete}
+              likes={tweet.likes}
+              sessionUserId={sessionUserId}
+              tweetId={tweet._id}
             />
           </div>
         </div>

@@ -2,13 +2,22 @@
 import { FiMessageSquare } from "react-icons/fi";
 import TweetBottomItem from "./TweetBottomItem";
 import { MdDelete } from "react-icons/md";
-
+import LikeButton from "../LikeButton/LikeButton";
 interface Props {
   ownsToUser: boolean;
   onDelete: () => void;
+  likes: string[];
+  sessionUserId: string;
+  tweetId: string;
 }
 
-const TweetBottom = ({ ownsToUser, onDelete }: Props) => {
+const TweetBottom = ({
+  ownsToUser,
+  onDelete,
+  likes,
+  sessionUserId,
+  tweetId,
+}: Props) => {
   const icons = [
     {
       icon: FiMessageSquare,
@@ -28,6 +37,12 @@ const TweetBottom = ({ ownsToUser, onDelete }: Props) => {
   return (
     <div className="mt-4">
       <div className="flex gap-4">
+        <LikeButton
+          tweetId={tweetId}
+          likes={likes}
+          sessionUserId={sessionUserId}
+        />
+
         {icons.map((item) => (
           <TweetBottomItem
             visible={item.visible}

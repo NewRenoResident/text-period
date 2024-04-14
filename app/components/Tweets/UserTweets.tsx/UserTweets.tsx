@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import MainPageElement from "../pages/MainPageElement";
 import { useInView } from "react-intersection-observer";
 import ky from "ky";
-import Tweet from "../Tweet/Tweet";
-import { APIResponse } from "./types";
 import { auth } from "@/lib/auth";
 import { useTweetsStore } from "@/app/store/tweets";
+import { APIResponse } from "../types";
+import MainPageElement from "../../pages/MainPageElement";
+import Tweet from "../../Tweet/Tweet";
 
 interface Props {
   numberOfTweetsToFetch?: number;
@@ -14,31 +14,34 @@ interface Props {
   sessionUserId: string;
 }
 
-const Tweets = ({
+const UserTweets = ({
   numberOfTweetsToFetch = 5,
   userId,
   sessionUserId,
 }: Props) => {
   const [ref, inView] = useInView();
-  const { tweetsOffset, addStepToOffset } = useTweetsStore();
-  const { tweets, userTweets, updateTweets, updateUserTweets } =
-    useTweetsStore();
+  const {
+    userTweets,
+    updateUserTweets,
+    addStepTouserTweetsOffset,
+    userTweetsOffset,
+  } = useTweetsStore();
   const [empty, setEmpty] = useState(false);
   const [loadMore, setLoadMore] = useState(1);
   const loadMoreTweets = async () => {
     const apiTweets: APIResponse = await ky
       .get(
-        `http://localhost:3000/api/tweet?offset=${tweetsOffset}&limit=${numberOfTweetsToFetch}&userId=${userId}`
+        `http://localhost:3000/api/tweet?offset=${userTweetsOffset}&limit=${numberOfTweetsToFetch}&userId=${userId}`
       )
       .json();
     console.log(apiTweets.tweets);
 
     if (!userId) {
-      updateTweets(apiTweets.tweets);
+      updateUserTweets(apiTweets.tweets);
     } else {
       updateUserTweets(apiTweets.tweets);
     }
-    addStepToOffset(numberOfTweetsToFetch);
+    addStepTouserTweetsOffset(numberOfTweetsToFetch);
     if (!apiTweets.tweets.length) setEmpty(true);
     if (empty && apiTweets.tweets.length) setEmpty(false);
   };
@@ -51,7 +54,7 @@ const Tweets = ({
 
   return (
     <div className={`w-full flex-col justify-center items-center`}>
-      {(userId ? userTweets : tweets).map((tweet) => (
+      {userTweets.map((tweet) => (
         <div key={tweet._id}>
           <MainPageElement>
             <Tweet tweet={tweet} sessionUserId={sessionUserId} />
@@ -77,4 +80,4 @@ const Tweets = ({
   );
 };
 
-export default Tweets;
+export default UserTweets;

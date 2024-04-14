@@ -1,17 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
-
+import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
 
-const UserHeader = ({
-  username,
-  tweetsCount,
-}: {
-  username: string;
-  tweetsCount: string;
-}) => {
+export default function CommentsPageHeader() {
   const router = useRouter();
-
   return (
     <div className="h-full w-full flex py-2 px-4 justify-start items-center gap-10">
       <button type="button" onClick={() => router.push("/home")}>
@@ -20,14 +13,10 @@ const UserHeader = ({
         </div>
       </button>
       <div>
-        <p className="text-2xl font-bold">{username}</p>
-        <p className="text-sm text-white text-opacity-40">
-          {tweetsCount} постов
-        </p>
+        <p className="text-2xl font-bold">Опубликовать пост</p>
+        <p className="text-sm text-white text-opacity-40"></p>
       </div>
       <div></div>
     </div>
   );
-};
-
-export default UserHeader;
+}

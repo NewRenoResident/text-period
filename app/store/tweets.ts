@@ -1,28 +1,50 @@
-import { ITweet, IUser } from "@/models/types";
 import { create } from "zustand";
 
 interface SimpleTweet {
-  authorId: IUser["_id"];
+  authorId: string; // Assuming IUser["_id"] is a string
   _id: string;
   content: string;
   img?: string;
-  likes: IUser["_id"][];
+  likes: string[]; // Assuming IUser["_id"] is a string
   retweets: string[];
 }
 
 interface TweetsState {
   tweets: SimpleTweet[];
   userTweets: SimpleTweet[];
+  tweetsOffset: number;
+  tweetsLimits: number;
+  userTweetsOffset: number;
+  userTweetsLimit: number;
   updateTweets: (newTweets: SimpleTweet[]) => void;
   updateUserTweets: (newTweets: SimpleTweet[]) => void;
   addTweet: (newTweet: SimpleTweet) => void;
   setTweets: (newTweets: SimpleTweet[]) => void;
   deleteById: (tweetId: string) => void;
+  addStepToOffset: (step: number) => void;
+  setTweetsLimit: (newLimit: number) => void;
+  addStepTouserTweetsOffset: (step: number) => void;
 }
 
 export const useTweetsStore = create<TweetsState>((set) => ({
   tweets: [],
+  tweetsOffset: 0,
+  tweetsLimits: 5,
+  userTweetsOffset: 0,
+  userTweetsLimit: 5,
   userTweets: [],
+  addStepToOffset: (step) =>
+    set((state) => ({
+      tweetsOffset: state.tweetsOffset + step,
+    })),
+  addStepTouserTweetsOffset: (step) =>
+    set((state) => ({
+      userTweetsOffset: state.userTweetsOffset + step,
+    })),
+  setTweetsLimit: (newLimit) =>
+    set((state) => ({
+      tweetsLimits: newLimit,
+    })),
   updateUserTweets: (newTweets) =>
     set((state) => ({
       userTweets: [...state.userTweets, ...newTweets],

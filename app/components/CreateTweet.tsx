@@ -15,11 +15,13 @@ const CreateTweet = ({ userImage, userId }: Props) => {
   const [text, setText] = useState("");
   const { tweets, addTweet: addTweetToStore } = useTweetsStore();
   const addTweet = createTweet.bind(null, userId);
+  const { addStepToOffset } = useTweetsStore();
 
   const handleUpdateTweet = async (e: FormData) => {
     const tweet = await addTweet(e);
     if (tweet) {
       addTweetToStore(tweet.tweet);
+      addStepToOffset(1);
     }
 
     setText("");
@@ -27,10 +29,10 @@ const CreateTweet = ({ userImage, userId }: Props) => {
   return (
     <form className="w-full " action={handleUpdateTweet}>
       <div className="flex mb-4">
-        <div className="w-20 h-20 bg-white rounded-full relative">
+        <div className="w-20 h-20 bg-[#3e4144] rounded-full relative">
           {userImage ? (
             <Image
-              alt=""
+              alt="user pic"
               src={`/uploads/${userImage}`}
               fill
               sizes="1"

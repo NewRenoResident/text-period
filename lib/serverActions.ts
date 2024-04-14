@@ -10,6 +10,7 @@ import { IUser } from "@/models/types";
 import { Tweet } from "@/models/tweets";
 import { Tweet as ITweet } from "@/app/components/Tweets/types";
 import email from "next-auth/providers/email";
+import { Comment } from "@/models/comments";
 
 export const getUserByEmail = async (
   email: string
@@ -266,5 +267,64 @@ export const getTweetById = async (tweetId: string) => {
     };
 
     return { tweet: simpleTweet };
+  }
+};
+
+export const setLikeById = async (tweetId: string, userId: string) => {
+  "use server";
+  connectToDb();
+  const updatedTweet = await Tweet.findByIdAndUpdate(
+    tweetId,
+    [
+      {
+        $set: {
+          likes: {
+            $cond: [
+              { $in: [userId, "$likes"] },
+              { $setDifference: ["$likes", [userId]] },
+              { $concatArrays: ["$likes", [userId]] },
+            ],
+          },
+        },
+      },
+    ],
+    { new: true }
+  );
+  return JSON.stringify({ jsonTweetLikes: updatedTweet?.likes });
+};
+
+export const loadComments = async (tweetId?: string) => {
+  const comments = await Comment.find({ tweetId: tweetId })
+    .sort({ createdAt: -1 })
+    .populate({
+      path: "authorId",
+      select: "-passwordHash",
+    });
+
+  if (comments.length > 0) {
+    return JSON.stringify(comments);
+  } else {
+    return JSON.stringify([]);
+  }
+};
+
+export const loadCommentsWithOffsetAndLimit = async (
+  offset?: number,
+  limit?: number,
+  tweetId?: string
+) => {
+  const comments = await Comment.find({ tweetId: tweetId })
+    .sort({ createdAt: -1 })
+    .skip(offset)
+    .limit(limit)
+    .populate({
+      path: "authorId",
+      select: "-passwordHash",
+    });
+
+  if (comments.length > 0) {
+    return JSON.stringify(comments);
+  } else {
+    return JSON.stringify([]);
   }
 };
