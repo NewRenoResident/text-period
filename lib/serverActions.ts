@@ -328,3 +328,28 @@ export const loadCommentsWithOffsetAndLimit = async (
     return JSON.stringify([]);
   }
 };
+
+export const createNewComment = async (
+  userId: string,
+  tweetId: string,
+  formData: FormData
+) => {
+  try {
+    const { content } = Object.fromEntries(formData);
+    connectToDb();
+    const newComment = new Comment({
+      authorId: userId,
+      content,
+      tweetId,
+    });
+    await newComment.save();
+    const user = await User.findOne({ _id: newComment.authorId });
+
+    const commentWithUser = { ...newComment._doc, authorId: user };
+    return JSON.stringify({ comment: commentWithUser });
+  } catch {
+    return {
+      error: "Error creating comment",
+    };
+  }
+};

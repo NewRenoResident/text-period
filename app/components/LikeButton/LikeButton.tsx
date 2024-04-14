@@ -16,8 +16,6 @@ export default function LikeButton({
   sessionUserId,
   tweetId,
 }: Props) {
-  console.log();
-
   const [likes, setLikes] = useState(initialLikes);
   const handleLikeClick = async (event: any) => {
     event.stopPropagation();
@@ -27,14 +25,16 @@ export default function LikeButton({
   };
 
   return (
-    <div
-      onClick={handleLikeClick}
-      className="relative p-2 rounded-full hover:cursor-pointer hover:bg-white  hover:bg-opacity-20"
-    >
-      {likes.includes(sessionUserId) ? <IoMdHeart /> : <IoIosHeartEmpty />}
+    <div>
+      <div
+        onClick={handleLikeClick}
+        className="relative p-2 rounded-full hover:cursor-pointer hover:bg-white  hover:bg-opacity-20"
+      >
+        {likes.includes(sessionUserId) ? <IoMdHeart /> : <IoIosHeartEmpty />}
 
-      <div className="absolute text-[10px] top-0 right-0 text-white bg-white bg-opacity-20 p-2 rounded-full flex justify-center items-center w-2 h-2">
-        <p>{likes.length}</p>
+        <div className="absolute text-[10px] top-0 right-0 text-white   flex justify-center items-center">
+          <p>{likes.length}</p>
+        </div>
       </div>
     </div>
   );

@@ -31,7 +31,6 @@ const Tweets = ({
         `http://localhost:3000/api/tweet?offset=${tweetsOffset}&limit=${numberOfTweetsToFetch}&userId=${userId}`
       )
       .json();
-    console.log(apiTweets.tweets);
 
     if (!userId) {
       updateTweets(apiTweets.tweets);

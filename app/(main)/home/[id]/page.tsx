@@ -1,10 +1,4 @@
-import Comments from "@/app/components/Comments/Comments";
-import CommentsPageHeader from "@/app/components/CommentsPageHeader/CommentsPageHeader";
-import CreateTweet from "@/app/components/CreateTweet";
-import Tweet from "@/app/components/Tweet/Tweet";
-import UserHeader from "@/app/components/UserHeader/UserHeader";
-import UserProfileCard from "@/app/components/UserProfileCard/UserProfileCard";
-import MainPageElement from "@/app/components/pages/MainPageElement";
+import CommentsPage from "@/app/components/CommentsPage/CommentsPage";
 import { auth } from "@/lib/auth";
 import {
   getTweetById,
@@ -27,20 +21,16 @@ const Page = async ({ params }: { params: { id: string } }) => {
     const tweet = await getTweetById(id);
     return tweet?.tweet;
   };
-  const tweet = await getTweet();
 
-  // const comments = await loadComments(0, 2, "661903d4a73bb0ada5a35238");
+  const tweet = await getTweet();
 
   return (
     <div>
-      <CommentsPageHeader />
-      <MainPageElement>
-        <Tweet tweet={tweet} sessionUserId={"" + user?._id} />
-      </MainPageElement>
-      <MainPageElement>
-        <CreateTweet userId={"" + user?._id} userImage={user?.wallpaperImg} />
-      </MainPageElement>
-      <Comments tweetId={id} />
+      <CommentsPage
+        tweet={tweet}
+        userId={"" + user?._id}
+        userImage={user?.img}
+      />
     </div>
   );
 };
