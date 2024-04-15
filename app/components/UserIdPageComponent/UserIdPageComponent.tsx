@@ -7,6 +7,8 @@ import UserTweets from "../Tweets/UserTweets.tsx/UserTweets";
 
 export default function UserIdPageComponent({ userId, sessionUserId }) {
   const [offset, setOffset] = useState(0);
+  const [tweets, setTweets] = useState([]);
+
   return (
     <div className="flex flex-col">
       <UserProfileCard userId={userId} />

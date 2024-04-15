@@ -30,18 +30,20 @@ function UserProfileCard({ userId }: { userId: string }) {
   if (!user) {
     return <div>Загрузка...</div>;
   }
-
   return (
     <div>
       <UserHeader username={user.username} tweetsCount={tweets} />
       <div className="container relative grid grid-rows-[65%_35%] h-64">
         <div className="w-full bg-[#333639]">
-          <Image
-            src={`/uploads/${user.wallpaperImg}`}
-            alt="user wallpaper"
-            layout="fill"
-            className="object-cover"
-          />
+          {user.wallpaperImg && (
+            <Image
+              src={`/uploads/${user.wallpaperImg}`}
+              alt="user wallpaper"
+              layout="fill"
+              className="object-cover"
+            />
+          )}
+
           <ChangeProfileInfo setUser={setUser} user={user} userId={userId} />
         </div>
         <div className="w-full h-[15vh]">

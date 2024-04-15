@@ -43,12 +43,14 @@ const MappedUserItems = () => {
         <Image src={white} alt="Picture of the author" width={25} height={25} />
       </div>
       {icons.map((item) => (
-        <NavItem
-          key={item.label}
-          icon={item.icon}
-          label={item.label}
-          href={item.href}
-        />
+        <div key={item.label}>
+          <NavItem
+            key={item.label}
+            icon={item.icon}
+            label={item.label}
+            href={item.href}
+          />
+        </div>
       ))}
       <NavItem icon={CiLogout} label={"Logout"} signOut={signOut} />
     </div>

@@ -4,10 +4,27 @@ import { useRouter } from "next/navigation";
 import { Tweet as TweetI } from "../Tweets/types";
 import userDefaultIcon from "@/public/Passport.png";
 import { auth } from "@/lib/auth";
-import { deleteTweetById, getUserByEmail } from "@/lib/serverActions";
+import {
+  deleteCommentById,
+  deleteTweetById,
+  getUserByEmail,
+} from "@/lib/serverActions";
 import { useTweetsStore } from "@/app/store/tweets";
+import CommentBottom from "../CommentBottom/CommentBottom";
+import TweetBottom from "../Tweet/TweetBottom";
 
-const Comment = ({ tweet }) => {
+const Comment = ({ tweet, userId, setComments }) => {
+  const handleDelete = async (e) => {
+    const res = await deleteCommentById(tweet._id);
+    if (res.result.deletedCount > 0) {
+      setComments((prev) =>
+        prev.filter((stateTweet) => stateTweet._id !== tweet._id)
+      );
+      // deleteById(tweet._id);
+      // addStepToOffset(-1);
+    }
+  };
+
   const calculateDateDifference = (date: string) => {
     const startDate = new Date(date);
     const endDate = new Date();
@@ -57,6 +74,14 @@ const Comment = ({ tweet }) => {
             )}
           </div>
         </div>
+        <TweetBottom
+          type="comment"
+          likes={tweet.likes}
+          onDelete={handleDelete}
+          sessionUserId={userId}
+          tweetId={tweet._id}
+          ownsToUser={"" + userId === "" + tweet.authorId._id}
+        />
       </div>
     );
   }

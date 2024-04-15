@@ -1,10 +1,16 @@
 "use client";
 
+import Link from "next/link";
+
 const RecommendedUsers = ({ users }: { users: any }) => {
   return (
-    <div>
+    <div className="flex flex-col gap-2 ">
       {users.users.map((user: any) => (
-        <div key={user._id}>{user.username}</div>
+        <div key={user.email}>
+          <Link href={`/user/${user._id}`}>
+            <div className="bg-sky-500 p-2 rounded-full">{user.username}</div>
+          </Link>
+        </div>
       ))}
     </div>
   );

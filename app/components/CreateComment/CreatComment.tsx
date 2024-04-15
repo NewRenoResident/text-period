@@ -24,7 +24,6 @@ const CreateComment = ({ userImage, userId, tweetId, setComments }: Props) => {
   const handleUpdateTweet = async (e: FormData) => {
     const commentResp = await createCommentWithUserIdAndTweetId(e);
     const comment = JSON.parse(commentResp);
-    console.log(comment);
 
     if (comment?.comment) {
       setComments((prev) => [comment.comment, ...prev]);

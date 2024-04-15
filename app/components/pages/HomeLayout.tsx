@@ -33,7 +33,7 @@ const HomeLayout: React.FC<LayoutI> = async ({ children }) => {
       </div>
       <div className="w-full hidden lg:block">
         <RightSidebar>
-          <RightSidebarCard label={"Кого почитать"}>
+          <RightSidebarCard label={"Кого читать"}>
             <RecommendedUsers users={randomUsers} />
           </RightSidebarCard>
         </RightSidebar>

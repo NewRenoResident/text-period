@@ -18,7 +18,6 @@ export default function CommentsPage({ tweet, userId, userImage }) {
     const getComments = async () => {
       const comments = await loadComments(tweet._id);
       const commentsResp = JSON.parse(comments);
-      console.log(commentsResp);
       setComments(commentsResp);
     };
     getComments();
@@ -40,6 +39,7 @@ export default function CommentsPage({ tweet, userId, userImage }) {
         />
       </MainPageElement>
       <Comments
+        userId={userId}
         tweetId={tweet?._id}
         comments={comments}
         setComments={setComments}

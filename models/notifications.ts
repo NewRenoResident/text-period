@@ -1,4 +1,5 @@
 import mongoose, { Model, Schema } from "mongoose";
+
 const notificationSchema: Schema = new mongoose.Schema(
   {
     userId: {
@@ -7,9 +8,15 @@ const notificationSchema: Schema = new mongoose.Schema(
       required: true,
     },
     content: { type: String, required: true },
-    type: { type: String, required: true },
+    viewed: { type: Boolean, required: true, default: false },
+    deleted: { type: Boolean, required: true, default: false },
+    type: {
+      type: String,
+      enum: ["comment", "like", "delete", "modified"],
+      required: true,
+    },
   },
-  { timestamps: true, required: true }
+  { timestamps: true }
 );
 
 export const Notification =

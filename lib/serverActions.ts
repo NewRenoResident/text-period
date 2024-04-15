@@ -11,7 +11,7 @@ import { Tweet } from "@/models/tweets";
 import { Tweet as ITweet } from "@/app/components/Tweets/types";
 import email from "next-auth/providers/email";
 import { Comment } from "@/models/comments";
-
+import { Notification } from "@/models/notifications";
 export const getUserByEmail = async (
   email: string
 ): Promise<IUser | { error: string }> => {
@@ -245,6 +245,38 @@ export const deleteTweetById = async (tweetId: string) => {
   const res = await Tweet.deleteOne({ _id: tweetId });
   return { result: res };
 };
+export const addNotification = async (
+  userId: string,
+  content: string,
+  type: "comment" | "like" | "delete" | "modified"
+) => {
+  connectToDb();
+  const newNotification = new Notification({
+    userId,
+    content,
+    viewed: false,
+    type: { type },
+    deleted: false,
+  });
+  const savedNewNotification = await newNotification.save();
+  console.log(savedNewNotification);
+};
+export const getNotifications = async (userId: string) => {
+  try {
+    connectToDb();
+    const notifications = await Notification.find({ userId: userId });
+    return JSON.stringify(notifications);
+  } catch (error) {
+    return { error: "" + error };
+  }
+};
+
+export const deleteCommentById = async (commentId: string) => {
+  "use server";
+  connectToDb();
+  const res = await Comment.deleteOne({ _id: commentId });
+  return { result: res };
+};
 
 export const getTweetById = async (tweetId: string) => {
   "use server";
@@ -274,6 +306,37 @@ export const setLikeById = async (tweetId: string, userId: string) => {
   "use server";
   connectToDb();
   const updatedTweet = await Tweet.findByIdAndUpdate(
+    tweetId,
+    [
+      {
+        $set: {
+          likes: {
+            $cond: [
+              { $in: [userId, "$likes"] },
+              { $setDifference: ["$likes", [userId]] },
+              { $concatArrays: ["$likes", [userId]] },
+            ],
+          },
+        },
+      },
+    ],
+    { new: true }
+  );
+  const user = await User.findOne({ _id: userId });
+
+  addNotification(
+    updatedTweet?.authorId,
+    `Пользователь ${user.username} поставил лайк на ваш пост: ${updatedTweet?.content}`,
+    "like"
+  );
+
+  return JSON.stringify({ jsonTweetLikes: updatedTweet?.likes });
+};
+
+export const setLikeToCommentById = async (tweetId: string, userId: string) => {
+  "use server";
+  connectToDb();
+  const updatedTweet = await Comment.findByIdAndUpdate(
     tweetId,
     [
       {
@@ -346,6 +409,15 @@ export const createNewComment = async (
     const user = await User.findOne({ _id: newComment.authorId });
 
     const commentWithUser = { ...newComment._doc, authorId: user };
+
+    const sendNotification = () => {
+      addNotification(
+        userId,
+        `Пользователь ${user.username} поставил лайк на ваш пост: ${updatedTweet?.content}`,
+        "like"
+      );
+    };
+
     return JSON.stringify({ comment: commentWithUser });
   } catch {
     return {

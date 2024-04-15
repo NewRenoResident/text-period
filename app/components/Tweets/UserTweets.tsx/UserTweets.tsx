@@ -20,27 +20,21 @@ const UserTweets = ({
   sessionUserId,
 }: Props) => {
   const [ref, inView] = useInView();
-  const {
-    userTweets,
-    updateUserTweets,
-    addStepTouserTweetsOffset,
-    userTweetsOffset,
-  } = useTweetsStore();
   const [empty, setEmpty] = useState(false);
   const [loadMore, setLoadMore] = useState(1);
+  const [tweets, setTweets] = useState([]);
+  const [offset, setOffset] = useState(0);
+
   const loadMoreTweets = async () => {
     const apiTweets: APIResponse = await ky
       .get(
-        `http://localhost:3000/api/tweet?offset=${userTweetsOffset}&limit=${numberOfTweetsToFetch}&userId=${userId}`
+        `http://localhost:3000/api/tweet?offset=${offset}&limit=${numberOfTweetsToFetch}&userId=${userId}`
       )
       .json();
 
-    if (!userId) {
-      updateUserTweets(apiTweets.tweets);
-    } else {
-      updateUserTweets(apiTweets.tweets);
-    }
-    addStepTouserTweetsOffset(numberOfTweetsToFetch);
+    setTweets([...apiTweets.tweets, ...tweets]);
+
+    setOffset(offset + numberOfTweetsToFetch);
     if (!apiTweets.tweets.length) setEmpty(true);
     if (empty && apiTweets.tweets.length) setEmpty(false);
   };
@@ -53,7 +47,7 @@ const UserTweets = ({
 
   return (
     <div className={`w-full flex-col justify-center items-center`}>
-      {userTweets.map((tweet) => (
+      {tweets.map((tweet) => (
         <div key={tweet._id}>
           <MainPageElement>
             <Tweet tweet={tweet} sessionUserId={sessionUserId} />

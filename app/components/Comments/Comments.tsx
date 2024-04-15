@@ -20,6 +20,7 @@ const Comments = ({
   tweetId,
   comments,
   setComments,
+  userId,
 }: Props) => {
   const [ref, inView] = useInView();
 
@@ -37,7 +38,11 @@ const Comments = ({
       {comments.map((comment) => (
         <div key={comment._id}>
           <MainPageElement>
-            <Comment tweet={comment} />
+            <Comment
+              setComments={setComments}
+              userId={userId}
+              tweet={comment}
+            />
           </MainPageElement>
         </div>
       ))}
