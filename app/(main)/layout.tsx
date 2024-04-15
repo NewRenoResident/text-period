@@ -6,6 +6,7 @@ import HomeLayout from "../components/pages/HomeLayout";
 import { auth } from "@/lib/auth";
 import { useUserStore } from "@/store";
 import InitializeUserStore from "../components/InitializeUserStore";
+import ky from "ky";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,9 +25,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const randomUsers = await ky(
+    "http://localhost:3000/api/users?random=true&count=5"
+  ).json();
+
   return (
     <BaseLayout inter={inter}>
-      <HomeLayout>{children}</HomeLayout>
+      <HomeLayout randomUsers={randomUsers.users}>{children}</HomeLayout>
     </BaseLayout>
   );
 }

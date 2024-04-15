@@ -45,7 +45,7 @@ const Tweet = ({ tweet, sessionUserId }: Props) => {
       seconds,
     };
   };
-  if (typeof tweet.authorId === "object") {
+  if (typeof tweet?.authorId === "object") {
     return (
       <div>
         <div

@@ -19,15 +19,17 @@ export default function NotificationsList({ userId }) {
   return (
     <div className="w-full flex flex-col h-full">
       {notifications
-        ? notifications.map((notification, index) => (
-            <MainPageElement key={index}>
-              <Notification
-                content={notification?.content}
-                createdAt={notification?.createdAt}
-                type={notification?.type?.type}
-              />
-            </MainPageElement>
-          ))
+        ? notifications.map((notification, index) => {
+            return (
+              <MainPageElement key={index}>
+                <Notification
+                  content={notification?.content}
+                  createdAt={notification?.createdAt}
+                  type={notification?.type}
+                />
+              </MainPageElement>
+            );
+          })
         : "You have no notifications"}
     </div>
   );

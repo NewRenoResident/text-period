@@ -14,11 +14,7 @@ const icons = {
   modified: <TfiWrite size={35} />,
 };
 
-export default function Notification({
-  content = "test",
-  createdAt = "today",
-  type = "comment",
-}) {
+export default function Notification({ content, createdAt, type }) {
   return (
     <div className="flex p-2 gap-2 items-center">
       <div>{icons[type]}</div>

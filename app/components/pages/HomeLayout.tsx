@@ -4,18 +4,16 @@ import { Inter } from "next/font/google";
 import RightSidebar from "../RightSidebar/RightSidebar";
 import RightSidebarCard from "../RightSidebarCard/RightSidebarCard";
 import RecommendedUsers from "../RightSidebar/RecommendedUsers/RecommendedUsers";
+import { IUser } from "@/models/types";
 import ky from "ky";
 const inter = Inter({ subsets: ["latin"] });
 
 interface LayoutI {
   children: React.ReactNode;
+  randomUsers: IUser[];
 }
 
-const HomeLayout: React.FC<LayoutI> = async ({ children }) => {
-  const randomUsers = await ky(
-    "http://localhost:3000/api/users?random=true&count=5"
-  ).json();
-
+const HomeLayout: React.FC<LayoutI> = async ({ children, randomUsers }) => {
   return (
     <div className="grid md:grid-cols-[1fr_4fr_1fr] grid-cols-[60px_1fr_0px] h-screen ">
       <div className="h-full">
@@ -31,10 +29,10 @@ const HomeLayout: React.FC<LayoutI> = async ({ children }) => {
       >
         {children}
       </div>
-      <div className="w-full hidden lg:block">
+      <div className="w-full  lg:block">
         <RightSidebar>
           <RightSidebarCard label={"Кого читать"}>
-            <RecommendedUsers users={randomUsers} />
+            <RecommendedUsers />
           </RightSidebarCard>
         </RightSidebar>
       </div>

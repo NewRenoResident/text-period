@@ -12,6 +12,7 @@ import { Tweet as ITweet } from "@/app/components/Tweets/types";
 import email from "next-auth/providers/email";
 import { Comment } from "@/models/comments";
 import { Notification } from "@/models/notifications";
+
 export const getUserByEmail = async (
   email: string
 ): Promise<IUser | { error: string }> => {
@@ -134,7 +135,6 @@ export const updateUser = async (userId: string, formData: FormData) => {
     dateOfBirthday,
   } = Object.fromEntries(formData) as FormDataEntries;
   connectToDb();
-  console.log(Object.fromEntries(formData));
 
   const wallpaperImagePath =
     wallpaperFile.name !== "undefined" &&
@@ -242,29 +242,40 @@ export const createTweet = async (userId: string, formData: FormData) => {
 export const deleteTweetById = async (tweetId: string) => {
   "use server";
   connectToDb();
+  const tweet = await Tweet.findOne({ _id: tweetId });
   const res = await Tweet.deleteOne({ _id: tweetId });
+  const addNotificationsGandler = async () => {
+    addNotification(
+      "" + tweet?.authorId,
+      `Твит ${tweet.content} был удалён`,
+      "delete"
+    );
+  };
+  addNotificationsGandler();
   return { result: res };
 };
 export const addNotification = async (
-  userId: string,
+  sendTo: string,
   content: string,
   type: "comment" | "like" | "delete" | "modified"
 ) => {
   connectToDb();
   const newNotification = new Notification({
-    userId,
+    userId: sendTo,
     content,
     viewed: false,
-    type: { type },
+    type: type,
     deleted: false,
   });
   const savedNewNotification = await newNotification.save();
-  console.log(savedNewNotification);
 };
+
 export const getNotifications = async (userId: string) => {
   try {
     connectToDb();
-    const notifications = await Notification.find({ userId: userId });
+    const notifications = await Notification.find({ userId: userId }).sort({
+      createdAt: -1,
+    });
     return JSON.stringify(notifications);
   } catch (error) {
     return { error: "" + error };
@@ -274,7 +285,16 @@ export const getNotifications = async (userId: string) => {
 export const deleteCommentById = async (commentId: string) => {
   "use server";
   connectToDb();
+  const comment = await Comment.findOne({ _id: commentId });
   const res = await Comment.deleteOne({ _id: commentId });
+  const addNotificationsGandler = async () => {
+    addNotification(
+      "" + comment?.authorId,
+      `Комментарий ${comment.content} был удалён`,
+      "delete"
+    );
+  };
+  addNotificationsGandler();
   return { result: res };
 };
 
@@ -336,7 +356,7 @@ export const setLikeById = async (tweetId: string, userId: string) => {
 export const setLikeToCommentById = async (tweetId: string, userId: string) => {
   "use server";
   connectToDb();
-  const updatedTweet = await Comment.findByIdAndUpdate(
+  const updatedComment = await Comment.findByIdAndUpdate(
     tweetId,
     [
       {
@@ -353,7 +373,14 @@ export const setLikeToCommentById = async (tweetId: string, userId: string) => {
     ],
     { new: true }
   );
-  return JSON.stringify({ jsonTweetLikes: updatedTweet?.likes });
+  const user = await User.findOne({ _id: userId });
+  addNotification(
+    updatedComment?.authorId,
+    `Пользователь ${user.username} поставил лайк на ваш комментарий: ${updatedComment?.content}`,
+    "like"
+  );
+
+  return JSON.stringify({ jsonTweetLikes: updatedComment?.likes });
 };
 
 export const loadComments = async (tweetId?: string) => {
@@ -406,17 +433,15 @@ export const createNewComment = async (
       tweetId,
     });
     await newComment.save();
-    const user = await User.findOne({ _id: newComment.authorId });
-
+    const tweet = await Tweet.findOne({ _id: tweetId });
+    const user = await User.findOne({ _id: userId });
     const commentWithUser = { ...newComment._doc, authorId: user };
 
-    const sendNotification = () => {
-      addNotification(
-        userId,
-        `Пользователь ${user.username} поставил лайк на ваш пост: ${updatedTweet?.content}`,
-        "like"
-      );
-    };
+    addNotification(
+      "" + tweet?.authorId,
+      `Пользователь ${"" + user.username} откомментировал ваш пост: ${"" + newComment?.content}`,
+      "comment"
+    );
 
     return JSON.stringify({ comment: commentWithUser });
   } catch {
@@ -424,4 +449,13 @@ export const createNewComment = async (
       error: "Error creating comment",
     };
   }
+};
+
+export const getRandomUsers = async (count: number) => {
+  "use server";
+  try {
+    connectToDb();
+    const users = await User.aggregate([{ $sample: { size: count } }]);
+    return JSON.stringify(users);
+  } catch (error) {}
 };
