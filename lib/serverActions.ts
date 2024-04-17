@@ -450,12 +450,20 @@ export const createNewComment = async (
     };
   }
 };
-
-export const getRandomUsers = async (count: number) => {
+export const getRandomUsers = async (count: number, exclude?: string[]) => {
   "use server";
   try {
     connectToDb();
-    const users = await User.aggregate([{ $sample: { size: count } }]);
+    const pipeline = [];
+    if (exclude && exclude.length > 0) {
+      pipeline.push({ $match: { _id: { $nin: exclude } } });
+    }
+    pipeline.push({ $sample: { size: count } });
+
+    const users = await User.aggregate(pipeline);
     return JSON.stringify(users);
-  } catch (error) {}
+  } catch (error) {
+    console.error("Failed to fetch random users: ", error);
+    return JSON.stringify([]);
+  }
 };

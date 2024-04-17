@@ -3,14 +3,16 @@ import Link from "next/link";
 import { IUser } from "@/models/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { getRandomUsers } from "@/lib/serverActions";
+import { getRandomUsers, getUserByEmail } from "@/lib/serverActions";
+import { auth } from "@/lib/auth";
+import SubscribeButton from "../../SubscribeButton/SubscribeButton";
 interface Props {
   users: IUser[];
 }
 
-const RecommendedUsers = () => {
+const RecommendedUsers = ({ sessionUser }) => {
   const [users, setUsers] = useState([]);
-  console.log(users);
+  const [user, setUser] = useState(sessionUser);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -46,9 +48,7 @@ const RecommendedUsers = () => {
 
                 <div className=" p-2 rounded-full">{user.username}</div>
               </div>
-              <button className="bg-white text-black p-1 rounded-full">
-                Читать
-              </button>
+              <SubscribeButton />
             </Link>
           </div>
         );
