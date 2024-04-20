@@ -5,16 +5,13 @@ import { IUser } from "@/models/types";
 import { useState } from "react";
 import { createTweet } from "@/lib/serverActions";
 import { useTweetsStore } from "../store/tweets";
+import { useSessionUserStore } from "../store/sessionUser";
 
-interface Props {
-  userImage: string | undefined;
-  userId: string;
-}
-
-const CreateTweet = ({ userImage, userId }: Props) => {
+const CreateTweet = () => {
+  const { sessionUser } = useSessionUserStore();
   const [text, setText] = useState("");
   const { tweets, addTweet: addTweetToStore } = useTweetsStore();
-  const addTweet = createTweet.bind(null, userId);
+  const addTweet = createTweet.bind(null, sessionUser?._id);
   const { addStepToOffset } = useTweetsStore();
 
   const handleUpdateTweet = async (e: FormData) => {
@@ -30,10 +27,10 @@ const CreateTweet = ({ userImage, userId }: Props) => {
     <form className="w-full " action={handleUpdateTweet}>
       <div className="flex mb-4">
         <div className="w-20 h-20 bg-[#3e4144] rounded-full relative">
-          {userImage ? (
+          {sessionUser?.img ? (
             <Image
               alt="user pic"
-              src={`/uploads/${userImage}`}
+              src={`/uploads/${sessionUser.img}`}
               fill
               sizes="1"
               className="object-cover rounded-full"

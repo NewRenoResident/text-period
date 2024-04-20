@@ -7,33 +7,10 @@ import { useSessionUserStore } from "../store/sessionUser";
 import { useEffect, useState } from "react";
 import { loadUser } from "@/lib/serverActions";
 
-interface Props {
-  sessionUser?: ISessionUser;
-}
+const UserProfileNavItem = () => {
+  const { sessionUser: user } = useSessionUserStore();
 
-const UserProfileNavItem = ({ sessionUser: sessionUserAuth }: Props) => {
-  const [user, setUser] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const getUser = async () => {
-      const userResp = await loadUser("" + sessionUserAuth?._id);
-      setUser(JSON.parse(userResp?.user));
-      setIsLoading(false);
-    };
-
-    if (sessionUserAuth?._id) {
-      getUser();
-    } else {
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [sessionUserAuth]);
-
-  if (isLoading) {
+  if (!user) {
     return <div>Loading</div>;
   }
   return (

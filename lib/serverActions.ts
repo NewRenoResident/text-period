@@ -20,11 +20,12 @@ export const getUserByEmail = async (
 
   try {
     const user = await User.findOne({ email });
+
     if (!user) {
       return { error: "User not found" };
     }
 
-    return user;
+    return JSON.parse(JSON.stringify(user));
   } catch (error) {
     return { error: "Something went wrong" };
   }
@@ -157,7 +158,7 @@ export const updateUser = async (userId: string, formData: FormData) => {
     { new: true }
   );
 
-  const userJson = JSON.stringify(user);
+  const userJson = JSON.parse(JSON.stringify(user));
 
   return userJson;
 };
@@ -212,7 +213,7 @@ export const createTweet = async (userId: string, formData: FormData) => {
           username: author?.username,
           email: author?.email,
           wallpaperImg: author?.wallpaperImg,
-          _id: author?._id,
+          _id: "" + author?._id,
           profileInfo: {
             fullName: author?.profileInfo.fullName,
             bio: author?.profileInfo.bio,

@@ -8,6 +8,16 @@ import { User } from "@/models/users";
 import { IUser } from "@/models/types";
 import { authConfig } from "@/auth.config";
 
+interface AuthUser {
+  email: string;
+  id?: string;
+}
+
+export interface AuthResponse {
+  user: AuthUser;
+  expires: string;
+}
+
 const login = async (credentials: any) => {
   try {
     connectToDb();

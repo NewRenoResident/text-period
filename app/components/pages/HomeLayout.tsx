@@ -16,19 +16,6 @@ interface LayoutI {
 }
 
 const HomeLayout: React.FC<LayoutI> = async ({ children, randomUsers }) => {
-  const getSessionUser = async () => {
-    const session = await auth();
-    const user = await getUserByEmail(session?.user?.email!);
-    if (!user?._doc) {
-      console.error("User document not found.");
-    } else {
-      let { passwordHash, __v, _id, ...sessionUser } = user._doc;
-      sessionUser = { ...sessionUser, _id: "" + _id } as ISessionUser;
-
-      return sessionUser;
-    }
-  };
-  const sessionUser = await getSessionUser();
   return (
     <div className="grid md:grid-cols-[1fr_4fr_1fr] grid-cols-[60px_1fr_0px] h-screen ">
       <div className="h-full">
@@ -47,7 +34,7 @@ const HomeLayout: React.FC<LayoutI> = async ({ children, randomUsers }) => {
       <div className="w-full  lg:block">
         <RightSidebar>
           <RightSidebarCard label={"Кого читать"}>
-            <RecommendedUsers sessionUser={sessionUser} />
+            <RecommendedUsers />
           </RightSidebarCard>
         </RightSidebar>
       </div>

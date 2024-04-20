@@ -3,21 +3,21 @@ import Image from "next/image";
 import white from "/public/white.svg";
 import { useState } from "react";
 import { createNewComment } from "@/lib/serverActions";
+import { useSessionUserStore } from "@/app/store/sessionUser";
 
 interface Props {
-  userImage: string | undefined;
-  userId: string;
   tweetId: string;
   comments: any;
   setComments: any;
 }
 
-const CreateComment = ({ userImage, userId, tweetId, setComments }: Props) => {
+const CreateComment = ({ tweetId, setComments }: Props) => {
   const [text, setText] = useState("");
+  const { sessionUser } = useSessionUserStore();
 
   const createCommentWithUserIdAndTweetId = createNewComment.bind(
     null,
-    userId,
+    sessionUser?._id,
     tweetId
   );
 
@@ -35,10 +35,10 @@ const CreateComment = ({ userImage, userId, tweetId, setComments }: Props) => {
     <form className="w-full " action={handleUpdateTweet}>
       <div className="flex mb-4">
         <div className="w-20 h-20 bg-[#3e4144] rounded-full relative">
-          {userImage ? (
+          {sessionUser?.img ? (
             <Image
               alt="user pic"
-              src={`/uploads/${userImage}`}
+              src={`/uploads/${sessionUser?.img}`}
               fill
               sizes="1"
               className="object-cover rounded-full"

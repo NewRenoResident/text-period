@@ -4,6 +4,7 @@ import { IoMdClose } from "react-icons/io";
 import { ChangeProfileInfoFormData } from "@/app/components/ChangeProfileInfo/ChangeProfileInfoFormData";
 import { updateUser } from "@/lib/serverActions";
 import { IUser } from "@/models/types";
+import { useSessionUserStore } from "@/app/store/sessionUser";
 
 const fullScreenStyle = {
   position: "fixed",
@@ -25,11 +26,12 @@ const ChangeProfileInfo = ({
   setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { setSessionUser } = useSessionUserStore();
   const updateUserWithId = updateUser.bind(null, userId);
 
   const handleUpdateUserWithId = async (e: FormData) => {
-    const userJson = await updateUserWithId(e);
-    const user = JSON.parse(userJson);
+    const user = await updateUserWithId(e);
+    setSessionUser(user);
     setUser(user);
   };
 

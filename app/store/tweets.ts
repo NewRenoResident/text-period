@@ -24,6 +24,7 @@ interface TweetsState {
   addStepToOffset: (step: number) => void;
   setTweetsLimit: (newLimit: number) => void;
   addStepTouserTweetsOffset: (step: number) => void;
+  findAndUpdateTweet: (tweet: SimpleTweet) => void;
 }
 
 export const useTweetsStore = create<TweetsState>((set) => ({
@@ -53,6 +54,15 @@ export const useTweetsStore = create<TweetsState>((set) => ({
     set((state) => ({
       tweets: [...state.tweets, ...newTweets],
     })),
+  findAndUpdateTweet: (tweet) =>
+    set((state) => {
+      const newTweets = state.tweets.map((t) =>
+        t._id === tweet._id ? tweet : t
+      );
+      return {
+        tweets: newTweets,
+      };
+    }),
   addTweet: (newTweet) =>
     set((state) => ({
       tweets: [newTweet, ...state.tweets],

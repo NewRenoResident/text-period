@@ -7,6 +7,8 @@ import { auth } from "@/lib/auth";
 import { useUserStore } from "@/store";
 import InitializeUserStore from "../components/InitializeUserStore";
 import ky from "ky";
+import TestComponent from "../components/TestComponent";
+import StoreSessionUser from "../components/StoreSessionUser";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,13 +27,16 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const randomUsers = await ky(
+  const dirtyRandomUsers = await ky(
     "http://localhost:3000/api/users?random=true&count=5"
   ).json();
-
+  const randomUsers = JSON.parse(JSON.stringify(dirtyRandomUsers));
+  const session = await auth();
   return (
     <BaseLayout inter={inter}>
-      <HomeLayout randomUsers={randomUsers.users}>{children}</HomeLayout>
+      <StoreSessionUser session={session}>
+        <HomeLayout randomUsers={randomUsers.users}>{children}</HomeLayout>
+      </StoreSessionUser>
     </BaseLayout>
   );
 }

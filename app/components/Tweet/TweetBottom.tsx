@@ -4,6 +4,8 @@ import TweetBottomItem from "./TweetBottomItem";
 import { MdDelete } from "react-icons/md";
 import LikeButton from "../LikeButton/LikeButton";
 import DeleteButton from "../DeleteButton/DeleteButton";
+import EditButton from "../EditButton/EditButton";
+
 interface Props {
   ownsToUser: boolean;
   onDelete: () => void;
@@ -22,12 +24,6 @@ const TweetBottom = ({
 }: Props) => {
   const icons = [
     {
-      icon: FiMessageSquare,
-      label: "Message",
-      action: () => {},
-      visible: true,
-    },
-    {
       icon: MdDelete,
       label: "Delete",
       action: onDelete,
@@ -45,6 +41,7 @@ const TweetBottom = ({
           likes={likes}
           sessionUserId={sessionUserId}
         />
+        <EditButton />
         {icons.map((item) => (
           <TweetBottomItem
             visible={item.visible}

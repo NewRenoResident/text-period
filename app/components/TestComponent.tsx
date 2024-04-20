@@ -2,10 +2,10 @@
 
 import { useUserStore } from "../store/user";
 
-const TestComponent = () => {
+const TestComponent = ({ children }) => {
   const user = useUserStore((state) => state.user);
 
-  return <div>{user.fullName}</div>;
+  return <div>{children}</div>;
 };
 
 export default TestComponent;

@@ -10,9 +10,8 @@ interface Props {
   users: IUser[];
 }
 
-const RecommendedUsers = ({ sessionUser }) => {
+const RecommendedUsers = () => {
   const [users, setUsers] = useState([]);
-  const [user, setUser] = useState(sessionUser);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -48,7 +47,10 @@ const RecommendedUsers = ({ sessionUser }) => {
 
                 <div className=" p-2 rounded-full">{user.username}</div>
               </div>
-              <SubscribeButton />
+              <SubscribeButton
+                label={["Подписаться", "Отписаться"]}
+                subscribeTo={JSON.parse(JSON.stringify(user))}
+              />
             </Link>
           </div>
         );

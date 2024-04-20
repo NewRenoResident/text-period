@@ -3,10 +3,11 @@ import Image from "next/image";
 import TweetBottom from "./TweetBottom";
 import { useRouter } from "next/navigation";
 import { Tweet as TweetI } from "../Tweets/types";
-import userDefaultIcon from "@/public/Passport.png";
 import { auth } from "@/lib/auth";
 import { deleteTweetById, getUserByEmail } from "@/lib/serverActions";
 import { useTweetsStore } from "@/app/store/tweets";
+import { useSessionUserStore } from "@/app/store/sessionUser";
+import TweetUserImage from "./TweetUserImage";
 
 interface Props {
   tweet: TweetI;
@@ -54,15 +55,7 @@ const Tweet = ({ tweet, sessionUserId }: Props) => {
             handleClick(tweet._id);
           }}
         >
-          <div className="min-w-10 h-20 rounded-full">
-            <Image
-              src={userDefaultIcon}
-              className="rounded-full"
-              alt="image"
-              width={50}
-              height={50}
-            />
-          </div>
+          <TweetUserImage img={tweet?.authorId?.img} />
           <div>
             <div className="flex justify-start items-center gap-2">
               <h2 className="font-bold">{tweet?.authorId?.username}</h2>
