@@ -26,14 +26,14 @@ const CreateTweet = () => {
   return (
     <form className="w-full " action={handleUpdateTweet}>
       <div className="flex mb-4">
-        <div className="w-20 h-20 bg-[#3e4144] rounded-full relative">
+        <div className="w-1 p-10 h-1 bg-[#3e4144] rounded-full relative">
           {sessionUser?.img ? (
             <Image
               alt="user pic"
               src={`/uploads/${sessionUser.img}`}
               fill
               sizes="1"
-              className="object-cover rounded-full"
+              className="object-cover rounded-full w-auto h-auto"
             />
           ) : (
             <Image alt="user-picture" width={60} height={60} src={white} />

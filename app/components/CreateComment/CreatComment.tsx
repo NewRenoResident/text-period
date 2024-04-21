@@ -41,7 +41,7 @@ const CreateComment = ({ tweetId, setComments }: Props) => {
               src={`/uploads/${sessionUser?.img}`}
               fill
               sizes="1"
-              className="object-cover rounded-full"
+              className="object-cover rounded-full w-auto h-auto"
             />
           ) : (
             <Image alt="user-picture" width={60} height={60} src={white} />

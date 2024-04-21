@@ -8,6 +8,8 @@ import { deleteTweetById, getUserByEmail } from "@/lib/serverActions";
 import { useTweetsStore } from "@/app/store/tweets";
 import { useSessionUserStore } from "@/app/store/sessionUser";
 import TweetUserImage from "./TweetUserImage";
+import TweetMainContent from "./TweetMainContent";
+import { useState } from "react";
 
 interface Props {
   tweet: TweetI;
@@ -15,9 +17,12 @@ interface Props {
 }
 
 const Tweet = ({ tweet, sessionUserId }: Props) => {
-  const router = useRouter();
+  const [editMode, setEditMode] = useState();
   const { deleteById } = useTweetsStore();
   const { addStepToOffset } = useTweetsStore();
+
+  const router = useRouter();
+
   const handleClick = (tweet_id: string) => {
     router.push(`/home/${tweet_id}`);
   };
@@ -28,24 +33,6 @@ const Tweet = ({ tweet, sessionUserId }: Props) => {
     addStepToOffset(-1);
   };
 
-  const calculateDateDifference = (date: string) => {
-    const startDate = new Date(date);
-    const endDate = new Date();
-
-    const differenceInMilliseconds = endDate - startDate;
-
-    const seconds = Math.floor(differenceInMilliseconds / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    return {
-      days,
-      hours,
-      minutes,
-      seconds,
-    };
-  };
   if (typeof tweet?.authorId === "object") {
     return (
       <div>
@@ -57,21 +44,7 @@ const Tweet = ({ tweet, sessionUserId }: Props) => {
         >
           <TweetUserImage img={tweet?.authorId?.img} />
           <div>
-            <div className="flex justify-start items-center gap-2">
-              <h2 className="font-bold">{tweet?.authorId?.username}</h2>
-              <p className="text-[#71767b]">{tweet?.authorId?.email}</p>
-              <p className="text-sm text-gray-500">
-                {calculateDateDifference(tweet.createdAt).hours < 100
-                  ? `${calculateDateDifference(tweet.createdAt).hours} Hours`
-                  : `${calculateDateDifference(tweet.createdAt).days} Days`}
-              </p>
-            </div>
-            <div className="flex">{tweet.content}</div>
-            {tweet.img && (
-              <div className="w-full border border-solid border-[#2f3336] rounded-xl">
-                <Image src={tweet.img} alt="image" width={500} height={500} />
-              </div>
-            )}
+            <TweetMainContent tweet={tweet} />
             <TweetBottom
               ownsToUser={"" + sessionUserId === "" + tweet.authorId._id}
               onDelete={handleDelete}

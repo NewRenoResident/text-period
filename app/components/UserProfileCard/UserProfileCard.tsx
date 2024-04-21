@@ -39,8 +39,9 @@ function UserProfileCard({ userId }: { userId: string }) {
             <Image
               src={`/uploads/${user.wallpaperImg}`}
               alt="user wallpaper"
-              layout="fill"
-              className="object-cover"
+              fill
+              sizes="1"
+              className="object-cover w-auto h-auto"
             />
           )}
 
@@ -61,9 +62,10 @@ function UserProfileCard({ userId }: { userId: string }) {
           {user.img && (
             <Image
               alt="user image"
-              layout="fill"
+              fill
+              sizes="1"
               src={`/uploads/${user.img}`}
-              className="object-cover rounded-full p-1"
+              className="object-cover rounded-full p-1 w-auto h-auto"
             />
           )}
         </div>
@@ -78,7 +80,7 @@ function UserProfileCard({ userId }: { userId: string }) {
         </div>
         <div className="text-gray-400 text-opacity-60 flex gap-2">
           <Image
-            className="invert"
+            className="invert w-auto h-auto"
             src={schedule}
             alt="schedule"
             width={15}

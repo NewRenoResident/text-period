@@ -24,9 +24,10 @@ const UserProfileNavItem = () => {
             <Image
               src={`/uploads/${user?.img}`}
               alt="image profile"
-              layout="fill"
+              fill
+              sizes="1"
               objectFit="cover"
-              className="rounded-full"
+              className="rounded-full w-auto h-auto"
             />
           </div>
         ) : (

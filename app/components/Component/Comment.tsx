@@ -50,7 +50,7 @@ const Comment = ({ tweet, userId, setComments }) => {
           <div className="min-w-10 h-20 rounded-full">
             <Image
               src={userDefaultIcon}
-              className="rounded-full"
+              className="rounded-full w-auto h-auto"
               alt="image"
               width={50}
               height={50}

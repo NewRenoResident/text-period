@@ -8,14 +8,24 @@ interface Props {
 
 export default function TweetUserImage({ img }: Props) {
   return (
-    <div className="min-w-10 h-20 rounded-full">
-      <Image
-        src={userDefaultIcon}
-        className="rounded-full"
-        alt="image"
-        width={50}
-        height={50}
-      />
+    <div className="w-1 h-1 p-8 rounded-full relative">
+      {img ? (
+        <Image
+          src={`/uploads/${img}`}
+          className="object-cover rounded-full w-auto h-auto"
+          alt="image"
+          fill
+          sizes="1"
+        />
+      ) : (
+        <Image
+          src={userDefaultIcon}
+          className="object-cover rounded-full w-auto h-auto"
+          alt="image"
+          fill
+          sizes="1"
+        />
+      )}
     </div>
   );
 }

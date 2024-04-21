@@ -49,7 +49,8 @@ export const ChangeProfileInfoFormData = ({}: {}) => {
           <Image
             src={wallpaperURL}
             fill={true}
-            className="object-cover"
+            sizes="1"
+            className="object-cover w-auto h-auto"
             alt="wallpaper"
           />
         )}
@@ -76,7 +77,8 @@ export const ChangeProfileInfoFormData = ({}: {}) => {
             <Image
               src={userPicURL}
               fill={true}
-              className="p-1 object-cover rounded-full"
+              sizes="1"
+              className="p-1 object-cover rounded-full w-auto h-auto"
               alt="wallpaper"
             />
           )}
