@@ -12,9 +12,11 @@ interface Props {
   likes: string[];
   sessionUserId: string;
   tweetId: string;
+  setEditMode: any
 }
 
 const TweetBottom = ({
+  setEditMode,
   ownsToUser,
   onDelete,
   likes,
@@ -41,7 +43,7 @@ const TweetBottom = ({
           likes={likes}
           sessionUserId={sessionUserId}
         />
-        <EditButton />
+        <EditButton setEditMode={setEditMode}/>
         {icons.map((item) => (
           <TweetBottomItem
             visible={item.visible}

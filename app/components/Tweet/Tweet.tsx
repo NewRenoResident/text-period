@@ -1,23 +1,21 @@
-"use client";
-import Image from "next/image";
-import TweetBottom from "./TweetBottom";
-import { useRouter } from "next/navigation";
-import { Tweet as TweetI } from "../Tweets/types";
-import { auth } from "@/lib/auth";
-import { deleteTweetById, getUserByEmail } from "@/lib/serverActions";
-import { useTweetsStore } from "@/app/store/tweets";
-import { useSessionUserStore } from "@/app/store/sessionUser";
-import TweetUserImage from "./TweetUserImage";
-import TweetMainContent from "./TweetMainContent";
-import { useState } from "react";
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { deleteTweetById } from '@/lib/serverActions';
+import { useTweetsStore } from '@/app/store/tweets';
+import { Tweet as TweetI } from '../Tweets/types';
+import TweetBottom from './TweetBottom';
+import TweetUserImage from './TweetUserImage';
+import TweetMainContent from './TweetMainContent';
 
 interface Props {
   tweet: TweetI;
   sessionUserId: string;
 }
 
-const Tweet = ({ tweet, sessionUserId }: Props) => {
-  const [editMode, setEditMode] = useState();
+function Tweet({ tweet, sessionUserId }: Props) {
+  const [editMode, setEditMode] = useState(false);
   const { deleteById } = useTweetsStore();
   const { addStepToOffset } = useTweetsStore();
 
@@ -33,7 +31,7 @@ const Tweet = ({ tweet, sessionUserId }: Props) => {
     addStepToOffset(-1);
   };
 
-  if (typeof tweet?.authorId === "object") {
+  if (typeof tweet?.authorId === 'object') {
     return (
       <div>
         <div
@@ -44,9 +42,10 @@ const Tweet = ({ tweet, sessionUserId }: Props) => {
         >
           <TweetUserImage img={tweet?.authorId?.img} />
           <div>
-            <TweetMainContent tweet={tweet} />
+            <TweetMainContent setEditMode={setEditMode} tweet={tweet} editMode={editMode} />
             <TweetBottom
-              ownsToUser={"" + sessionUserId === "" + tweet.authorId._id}
+              setEditMode={setEditMode}
+              ownsToUser={`${sessionUserId}` === `${tweet.authorId._id}`}
               onDelete={handleDelete}
               likes={tweet.likes}
               sessionUserId={sessionUserId}
@@ -57,6 +56,6 @@ const Tweet = ({ tweet, sessionUserId }: Props) => {
       </div>
     );
   }
-};
+}
 
 export default Tweet;

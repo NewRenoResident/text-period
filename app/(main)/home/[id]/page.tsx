@@ -19,7 +19,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
   const getTweet = async () => {
     const tweet = await getTweetById(id);
-    return tweet?.tweet;
+    return JSON.parse(JSON.stringify(tweet?.tweet));
   };
 
   const tweet = await getTweet();
