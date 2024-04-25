@@ -43,7 +43,7 @@ const TweetBottom = ({
           likes={likes}
           sessionUserId={sessionUserId}
         />
-        <EditButton setEditMode={setEditMode}/>
+        <EditButton setEditMode={setEditMode} visible={ownsToUser}/>
         {icons.map((item) => (
           <TweetBottomItem
             visible={item.visible}

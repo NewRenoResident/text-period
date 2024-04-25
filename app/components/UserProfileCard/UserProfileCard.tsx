@@ -80,7 +80,7 @@ function UserProfileCard({ userId }: { userId: string }) {
         </div>
         <div className="text-gray-400 text-opacity-60 flex gap-2">
           <Image
-            className="invert w-auto h-auto"
+            className="invert "
             src={schedule}
             alt="schedule"
             width={15}

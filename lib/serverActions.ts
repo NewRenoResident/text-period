@@ -468,3 +468,76 @@ export const getRandomUsers = async (count: number, exclude?: string[]) => {
     return JSON.stringify([]);
   }
 };
+
+export const updateTweet = async (tweetId: string, content: string) => {
+  "use server";
+  try {
+    const updatedTweet = await Tweet.findByIdAndUpdate(
+      tweetId,
+      { content },
+      { new: true }
+    );
+    const user = await User.find({ _id: updatedTweet?.authorId });
+    const resultTweet = { ...updatedTweet?._doc, authorId: user[0] };
+    return JSON.parse(JSON.stringify(resultTweet));
+  } catch (error) {
+    return { error: "Can't update tweet" };
+  }
+};
+
+export const subscribeToUser = async (
+  userId: string,
+  subscribeToId: string
+) => {
+  "use server";
+  try {
+    connectToDb();
+
+    const user = await User.findOneAndUpdate(
+      { _id: userId },
+      {
+        $addToSet: { following: subscribeToId },
+      },
+      { new: true }
+    );
+
+    const subscriber = await User.findOneAndUpdate(
+      { _id: subscribeToId },
+      {
+        $addToSet: { followers: userId },
+      },
+      { new: true }
+    );
+    return JSON.parse(JSON.stringify(user));
+  } catch (error) {
+    return { error: "Can't subscribe to user" };
+  }
+};
+
+export const unSubscribeToUser = async (
+  userId: string,
+  subscribeToId: string
+) => {
+  "use server";
+  try {
+    connectToDb();
+    const user = await User.findOneAndUpdate(
+      { _id: userId },
+      {
+        $pull: { following: subscribeToId },
+      },
+      { new: true }
+    );
+
+    const subscriber = await User.findOneAndUpdate(
+      { _id: subscribeToId },
+      {
+        $pull: { followers: userId },
+      },
+      { new: true }
+    );
+    return JSON.parse(JSON.stringify(user));
+  } catch (error) {
+    return { error: "Can't subscribe to user" };
+  }
+};

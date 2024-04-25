@@ -59,6 +59,7 @@ export const useTweetsStore = create<TweetsState>((set) => ({
       const newTweets = state.tweets.map((t) =>
         t._id === tweet._id ? tweet : t
       );
+      
       return {
         tweets: newTweets,
       };

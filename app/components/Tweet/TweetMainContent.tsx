@@ -5,6 +5,7 @@ import TweetContent from './TweetContent';
 import TweetEditMode from './TweetEditMode';
 import { useParseDate } from '@/app/hooks/useParseDate';
 import { useTweetsStore } from '@/app/store/tweets';
+import { updateTweet } from '@/lib/serverActions';
 
 interface Props {
   tweet: ITweet;
@@ -18,8 +19,11 @@ export default function TweetMainContent({ tweet, editMode, setEditMode }: Props
   } = useParseDate(tweet.createdAt);
   const { findAndUpdateTweet } = useTweetsStore();
 
-  const editTweetGandler = (formData) => {
-    console.log(formData.get('content'));
+  const editTweetHandler = async (formData) => {
+    const newTweet = await updateTweet(tweet._id, formData.get('content'));
+    if (newTweet._id){
+      findAndUpdateTweet(newTweet)
+    }
     setEditMode(false);
   };
 
@@ -33,7 +37,7 @@ export default function TweetMainContent({ tweet, editMode, setEditMode }: Props
         </p>
       </div>
       {editMode ? (
-        <TweetEditMode action={editTweetGandler} />
+        <TweetEditMode defaultText={tweet.content} action={editTweetHandler} />
       ) : (
         <TweetContent tweet={tweet} createdAt={tweet.createdAt} />
       )}

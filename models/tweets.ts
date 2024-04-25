@@ -7,7 +7,7 @@ const tweetSchema: Schema<ITweet> = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    content: { type: String, required: true },
+    content: { type: String, required: true, minlength: 1 },
     img: { type: String },
     likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     retweets: [{ type: Schema.Types.ObjectId, ref: "Tweet" }],

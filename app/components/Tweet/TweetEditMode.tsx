@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BlueButton from '../Buttons/BlueButton/BlueButton';
 
 interface Props {
-  setEditMode: any;
   action: any;
+  defaultText: string;
 }
 
-export default function TweetEditMode({ setEditMode, action }: Props) {
+export default function TweetEditMode({  action, defaultText }: Props) {
+  const [text, setText] = useState(defaultText);
   return (
     <form
       action={(e) => action(e)}
@@ -15,10 +16,12 @@ export default function TweetEditMode({ setEditMode, action }: Props) {
     >
       <input
         name="content"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
         className="bg-inherit border border-solid border-white rounded-sm"
         type="text"
       />
-      <BlueButton onClick={() => setEditMode(false)} text="Apply" />
+      <BlueButton type="submit" text="Apply" active={(text.length > 0)} />
     </form>
   );
 }

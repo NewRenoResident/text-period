@@ -35,10 +35,10 @@ export default function LikeButton({
         onClick={handleLikeClick}
         className="p-2 rounded-full hover:cursor-pointer hover:bg-white flex gap-2 hover:bg-opacity-20"
       >
-        {likes.includes(sessionUserId) ? <IoMdHeart /> : <IoIosHeartEmpty />}
+        {likes?.includes(sessionUserId) ? <IoMdHeart /> : <IoIosHeartEmpty />}
 
         <div className="text-xs text-white flex justify-center items-center">
-          <p className="font-bold">{likes.length}</p>
+          <p className="font-bold">{likes?.length}</p>
         </div>
       </div>
     </div>
