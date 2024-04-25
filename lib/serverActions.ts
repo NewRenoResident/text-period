@@ -541,3 +541,22 @@ export const unSubscribeToUser = async (
     return { error: "Can't subscribe to user" };
   }
 };
+
+export const findTweetsByContent = async (searchContent: string) => {
+  "use server"
+  try {
+    connectToDb();
+
+    
+  const tweets = await Tweet.find({
+    content: { $regex: new RegExp(searchContent, 'i') } // Создаёт регулярное выражение для поиска, нечувствительное к регистру
+  }).populate({
+    path: "authorId",
+    select: "-passwordHash" // Исключает поле passwordHash из возвращаемых данных
+  });
+   return JSON.parse(JSON.stringify(tweets));
+    
+  } catch (error) {
+    
+  }
+}
