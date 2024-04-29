@@ -288,14 +288,14 @@ export const deleteCommentById = async (commentId: string) => {
   connectToDb();
   const comment = await Comment.findOne({ _id: commentId });
   const res = await Comment.deleteOne({ _id: commentId });
-  const addNotificationsGandler = async () => {
+  const addNotificationsHandler = async () => {
     addNotification(
       "" + comment?.authorId,
       `Комментарий ${comment.content} был удалён`,
       "delete"
     );
   };
-  addNotificationsGandler();
+  addNotificationsHandler();
   return { result: res };
 };
 
@@ -384,8 +384,8 @@ export const setLikeToCommentById = async (tweetId: string, userId: string) => {
   return JSON.stringify({ jsonTweetLikes: updatedComment?.likes });
 };
 
-export const loadComments = async (tweetId?: string) => {
-  const comments = await Comment.find({ tweetId: tweetId })
+export const loadComments = async (tweetId: string) => {
+  const comments = await Comment.find({ tweetId })
     .sort({ createdAt: -1 })
     .populate({
       path: "authorId",
@@ -393,9 +393,9 @@ export const loadComments = async (tweetId?: string) => {
     });
 
   if (comments.length > 0) {
-    return JSON.stringify(comments);
+    return JSON.parse(JSON.stringify(comments));
   } else {
-    return JSON.stringify([]);
+    return JSON.parse(JSON.stringify([]));
   }
 };
 
@@ -543,20 +543,32 @@ export const unSubscribeToUser = async (
 };
 
 export const findTweetsByContent = async (searchContent: string) => {
-  "use server"
+  "use server";
   try {
     connectToDb();
 
-    
-  const tweets = await Tweet.find({
-    content: { $regex: new RegExp(searchContent, 'i') } // Создаёт регулярное выражение для поиска, нечувствительное к регистру
-  }).populate({
-    path: "authorId",
-    select: "-passwordHash" // Исключает поле passwordHash из возвращаемых данных
-  });
-   return JSON.parse(JSON.stringify(tweets));
-    
+    const tweets = await Tweet.find({
+      content: { $regex: new RegExp(searchContent, "i") }, // Создаёт регулярное выражение для поиска, нечувствительное к регистру
+    }).populate({
+      path: "authorId",
+      select: "-passwordHash", // Исключает поле passwordHash из возвращаемых данных
+    });
+    return JSON.parse(JSON.stringify(tweets));
+  } catch (error) {}
+};
+
+export const updateComment = async (commentId: string, content: string) => {
+  "use server";
+  try {
+    const updatedComment = await Comment.findByIdAndUpdate(
+      commentId,
+      { content },
+      { new: true }
+    );
+    const user = await User.find({ _id: updatedComment?.authorId });
+    const resultTweet = { ...updatedComment?._doc, authorId: user[0] };
+    return JSON.parse(JSON.stringify(resultTweet));
   } catch (error) {
-    
+    return { error: "Can't update comment" };
   }
-}
+};

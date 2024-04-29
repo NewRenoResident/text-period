@@ -17,10 +17,10 @@ const SearchBar: React.FC<SearchInt> = ({ tweets, setTweets }: SearchInt) => {
   };
 
   return (
-    <div>
+    <div className="p-4">
       <form
         action={handleSubmit}
-        className="text-black relative w-full bg-white rounded-xl p-2 m-4"
+        className="text-black relative w-full bg-white rounded-xl p-2 "
       >
         <input
           onChange={(e) => setText(e.target.value)}

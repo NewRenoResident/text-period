@@ -14,9 +14,9 @@ const TweetBottomItem = ({
   visible,
   action,
 }: TweetBottomItemI) => {
-  const handleBottomClick = (event) => {
+  const handleBottomClick = async (event) => {
     event.stopPropagation();
-    action();
+    await action();
   };
   return (
     <div

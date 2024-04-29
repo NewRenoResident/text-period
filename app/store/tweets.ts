@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface SimpleTweet {
+export interface SimpleTweet {
   authorId: string; // Assuming IUser["_id"] is a string
   _id: string;
   content: string;
@@ -59,7 +59,7 @@ export const useTweetsStore = create<TweetsState>((set) => ({
       const newTweets = state.tweets.map((t) =>
         t._id === tweet._id ? tweet : t
       );
-      
+
       return {
         tweets: newTweets,
       };

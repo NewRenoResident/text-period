@@ -1,3 +1,6 @@
+import { SimpleTweet } from "@/app/store/tweets";
+import { NextRouter } from "next/router";
+
 export interface User {
   _id: string;
   email: string;
@@ -26,4 +29,22 @@ export interface Tweet {
 
 export interface APIResponse {
   tweets: Tweet[];
+}
+
+export interface ITweetSettings {
+  onRouteClick: (id: string, router: NextRouter) => void;
+  handleDelete: (tweetId: string) => void;
+  handleLike: (setLikes: any, tweetId: string) => void;
+  editTweetHandler: (
+    formData: FormData,
+    setEditMode: any,
+    tweetId: string
+  ) => void;
+}
+
+export interface ITweetsProps {
+  tweetSettings: ITweetSettings;
+  hookGetTweetsAndLoadTweets: (
+    limit?: number
+  ) => () => [SimpleTweet[], () => void];
 }

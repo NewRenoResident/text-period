@@ -15,26 +15,26 @@ export default function TweetsTypeNav({ userId, sessionUserId }: Props) {
 
   return (
     <div>
-      <div className="flex justify-around h-20 gap-1">
+      <div className="flex justify-around h-10 gap-1">
         <BlueButton
-          className="w-full h-full  hover:bg-opacity-80 rounded-none"
+          className="w-full h-full hover:bg-opacity-80 rounded-none"
           text="Твиты"
           active={!(tweetTypes === "user")}
           onClick={() => handleButtonClick("user")}
         />
         <BlueButton
-          className="w-full h-full  hover:bg-opacity-80 rounded-none"
+          className="w-full h-full hover:bg-opacity-80 rounded-none"
           text="Подписки"
           active={!(tweetTypes === "following")}
           onClick={() => handleButtonClick("following")}
         />
       </div>
-      <div>
+      {/* <div>
         {tweetTypes === "user" && (
           <UserTweets sessionUserId={sessionUserId} userId={userId} />
         )}
         {tweetTypes === "following" && <FollowingTweets />}
-      </div>
+      </div> */}
     </div>
   );
 }

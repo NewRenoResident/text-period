@@ -13,6 +13,7 @@ interface Props {
 }
 
 export default function LikeButton({
+  handleLike,
   likes: initialLikes,
   sessionUserId,
   tweetId,
@@ -21,12 +22,7 @@ export default function LikeButton({
   const [likes, setLikes] = useState(initialLikes);
   const handleLikeClick = async (event: any) => {
     event.stopPropagation();
-    const likesResponse =
-      type !== "comment"
-        ? await setLikeById(tweetId, sessionUserId)
-        : await setLikeToCommentById(tweetId, sessionUserId);
-
-    setLikes(JSON.parse(likesResponse).jsonTweetLikes);
+    handleLike(setLikes, tweetId);
   };
 
   return (

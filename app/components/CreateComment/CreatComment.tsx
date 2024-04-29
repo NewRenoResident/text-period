@@ -4,6 +4,7 @@ import white from "/public/white.svg";
 import { useState } from "react";
 import { createNewComment } from "@/lib/serverActions";
 import { useSessionUserStore } from "@/app/store/sessionUser";
+import { useCommentsStore } from "@/app/store/comments";
 
 interface Props {
   tweetId: string;
@@ -11,10 +12,10 @@ interface Props {
   setComments: any;
 }
 
-const CreateComment = ({ tweetId, setComments }: Props) => {
+const CreateComment = ({ tweetId }: Props) => {
   const [text, setText] = useState("");
   const { sessionUser } = useSessionUserStore();
-
+  const { comment, addComment } = useCommentsStore();
   const createCommentWithUserIdAndTweetId = createNewComment.bind(
     null,
     sessionUser?._id,
@@ -26,7 +27,7 @@ const CreateComment = ({ tweetId, setComments }: Props) => {
     const comment = JSON.parse(commentResp);
 
     if (comment?.comment) {
-      setComments((prev) => [comment.comment, ...prev]);
+      addComment(tweetId, comment.comment);
     }
 
     setText("");

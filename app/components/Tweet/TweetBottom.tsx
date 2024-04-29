@@ -12,13 +12,14 @@ interface Props {
   likes: string[];
   sessionUserId: string;
   tweetId: string;
-  setEditMode: any
+  setEditMode: any;
 }
 
 const TweetBottom = ({
   setEditMode,
   ownsToUser,
   onDelete,
+  handleLike,
   likes,
   sessionUserId,
   tweetId,
@@ -38,21 +39,14 @@ const TweetBottom = ({
     <div className="mt-4">
       <div className="flex gap-4">
         <LikeButton
+          handleLike={handleLike}
           type={type}
           tweetId={tweetId}
           likes={likes}
           sessionUserId={sessionUserId}
         />
-        <EditButton setEditMode={setEditMode} visible={ownsToUser}/>
-        {icons.map((item) => (
-          <TweetBottomItem
-            visible={item.visible}
-            color={item.color}
-            key={item.label}
-            icon={item.icon}
-            action={item.action}
-          />
-        ))}
+        <EditButton setEditMode={setEditMode} visible={ownsToUser} />
+        {ownsToUser && <DeleteButton action={() => onDelete(tweetId)} />}
       </div>
     </div>
   );
