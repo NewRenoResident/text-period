@@ -7,10 +7,12 @@ import ChangeProfileInfo from "../ChangeProfileInfo/ChangeProfileInfo";
 import UserHeader from "../UserHeader/UserHeader";
 import { getUserTweetsCount, loadUser } from "@/lib/serverActions";
 import { IUser } from "@/models/types";
+import { useSessionUserStore } from "@/app/store/sessionUser";
 
 function UserProfileCard({ userId }: { userId: string }) {
   const [user, setUser] = useState<IUser | null>(null);
   const [tweets, setTweets] = useState<any>(null);
+  const { sessionUser } = useSessionUserStore();
 
   useEffect(() => {
     const loadAsyncUser = async () => {
@@ -44,8 +46,9 @@ function UserProfileCard({ userId }: { userId: string }) {
               className="object-cover w-auto h-auto"
             />
           )}
-
-          <ChangeProfileInfo setUser={setUser} user={user} userId={userId} />
+          {sessionUser._id === userId && (
+            <ChangeProfileInfo setUser={setUser} user={user} userId={userId} />
+          )}
         </div>
         <div className="w-full h-[15vh]">
           <div className="p-4 flex flex-row-reverse justify-between"></div>

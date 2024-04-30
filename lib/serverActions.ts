@@ -12,12 +12,34 @@ import { Tweet as ITweet } from "@/app/components/Tweets/types";
 import email from "next-auth/providers/email";
 import { Comment } from "@/models/comments";
 import { Notification } from "@/models/notifications";
+import { ObjectId } from "mongodb";
+
+export const loadFollowingTweets = async (ids: string[]) => {
+  try {
+    connectToDb();
+    let tweets: any[] = [];
+
+    for (let id in ids) {
+      const tweetsResp = await Tweet.find({ authorId: ids[id] }).populate({
+        path: "authorId",
+        select: "-passwordHash",
+      });
+      if (tweetsResp) tweets = [...tweets, ...tweetsResp];
+      tweets.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+    }
+
+    return JSON.parse(JSON.stringify(tweets));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const getUserByEmail = async (
   email: string
 ): Promise<IUser | { error: string }> => {
   "use server";
-
   try {
     const user = await User.findOne({ email });
 
@@ -570,5 +592,20 @@ export const updateComment = async (commentId: string, content: string) => {
     return JSON.parse(JSON.stringify(resultTweet));
   } catch (error) {
     return { error: "Can't update comment" };
+  }
+};
+
+export const getUserTweets = async (userId: string) => {
+  try {
+    connectToDb();
+    const tweets = await Tweet.find({ authorId: userId })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "authorId",
+        select: "-passwordHash",
+      });
+    return JSON.parse(JSON.stringify(tweets));
+  } catch (error) {
+    return { error: "Can't get tweets" };
   }
 };

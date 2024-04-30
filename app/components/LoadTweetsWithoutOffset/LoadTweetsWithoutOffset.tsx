@@ -13,8 +13,6 @@ export default function LoadTweetsWithoutOffset({
     getTweets();
   }, []);
 
-  console.log(tweets);
-
   if (tweets) {
     return (
       <div className={`w-full flex-col justify-center items-center`}>

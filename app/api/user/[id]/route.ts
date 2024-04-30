@@ -8,6 +8,5 @@ export const GET = async (
 ) => {
   connectToDb();
   const user = await User.findOne({ _id: params.id }).select("-passwordHash");
-
   return NextResponse.json({ user }, { status: 200 });
 };

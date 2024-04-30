@@ -29,12 +29,10 @@ export default function TweetsTypeNav({ userId, sessionUserId }: Props) {
           onClick={() => handleButtonClick("following")}
         />
       </div>
-      {/* <div>
-        {tweetTypes === "user" && (
-          <UserTweets sessionUserId={sessionUserId} userId={userId} />
-        )}
-        {tweetTypes === "following" && <FollowingTweets />}
-      </div> */}
+      <div>
+        {tweetTypes === "user" && <UserTweets userId={userId} />}
+        {tweetTypes === "following" && <FollowingTweets userId={userId} />}
+      </div>
     </div>
   );
 }

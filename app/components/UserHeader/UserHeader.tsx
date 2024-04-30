@@ -14,7 +14,7 @@ const UserHeader = ({
 
   return (
     <div className="h-full w-full flex py-2 px-4 justify-start items-center gap-10">
-      <button type="button" onClick={() => router.push("/home")}>
+      <button type="button" onClick={() => router.back()}>
         <div className="hover:bg-white hover:bg-opacity-30 rounded-full p-2">
           <FaArrowLeft size={20} />
         </div>

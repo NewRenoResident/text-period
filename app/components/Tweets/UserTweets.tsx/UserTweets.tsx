@@ -4,72 +4,57 @@ import { useInView } from "react-intersection-observer";
 import ky from "ky";
 import { auth } from "@/lib/auth";
 import { useTweetsStore } from "@/app/store/tweets";
-import { APIResponse } from "../types";
+import { APIResponse, ITweetSettings } from "../types";
 import MainPageElement from "../../pages/MainPageElement";
 import Tweet from "../../Tweet/Tweet";
+import CreateTweet from "../../CreateTweet";
+import Tweets from "../Tweets";
+import { useLoadUserTweets } from "@/app/hooks/useLoadUserTweets";
+import { deleteTweetById, setLikeById, updateTweet } from "@/lib/serverActions";
+import { useSessionUserStore } from "@/app/store/sessionUser";
 
 interface Props {
-  numberOfTweetsToFetch?: number;
   userId?: string;
-  sessionUserId: string;
 }
 
-const UserTweets = ({
-  numberOfTweetsToFetch = 5,
-  userId,
-  sessionUserId,
-}: Props) => {
-  const [ref, inView] = useInView();
-  const [empty, setEmpty] = useState(false);
-  const [loadMore, setLoadMore] = useState(1);
+const UserTweets = ({ userId }: Props) => {
   const [tweets, setTweets] = useState([]);
-  const [offset, setOffset] = useState(0);
+  const { sessionUser } = useSessionUserStore();
 
-  const loadMoreTweets = async () => {
-    const apiTweets: APIResponse = await ky
-      .get(
-        `http://localhost:3000/api/tweet?offset=${offset}&limit=${numberOfTweetsToFetch}&userId=${userId}`
-      )
-      .json();
-
-    setTweets([...apiTweets.tweets, ...tweets]);
-
-    setOffset(offset + numberOfTweetsToFetch);
-    if (!apiTweets.tweets.length) setEmpty(true);
-    if (empty && apiTweets.tweets.length) setEmpty(false);
+  const handleHook = () => {
+    return () => useLoadUserTweets(userId, tweets, setTweets);
   };
 
-  useEffect(() => {
-    if (inView) {
-      loadMoreTweets();
-    }
-  }, [inView, loadMore]);
+  const tweetSettings: ITweetSettings = {
+    onRouteClick: (id: string, router: NextRouter) => {
+      router.push(`/home/${id}`);
+    },
+    handleDelete: async (tweetId) => {
+      const res = await deleteTweetById(tweetId);
+      setTweets(tweets.filter((t) => t?._id !== tweetId));
+    },
+    handleLike: async (setLikes, tweetId) => {
+      const likesResponse = await setLikeById(tweetId, sessionUser?._id);
+      setLikes(JSON.parse(likesResponse).jsonTweetLikes);
+    },
+    editTweetHandler: async (formData, setEditMode, tweetId) => {
+      const content = formData.get("content");
+      const newTweet = await updateTweet(tweetId, content);
+      if (newTweet._id) {
+        setTweets(
+          tweets.map((t) =>
+            t._id === tweetId ? { ...t, content: content } : t
+          )
+        );
+      }
+      setEditMode(false);
+    },
+  };
 
   return (
-    <div className={`w-full flex-col justify-center items-center`}>
-      {tweets.map((tweet) => (
-        <div key={tweet._id}>
-          <MainPageElement>
-            <Tweet tweet={tweet} sessionUserId={sessionUserId} />
-          </MainPageElement>
-        </div>
-      ))}
-
-      {empty ? (
-        <div className="mx-auto w-fit p-10">No tweets</div>
-      ) : (
-        <div className="m-auto w-fit" ref={ref}>
-          <button
-            type="button"
-            onClick={() => {
-              setLoadMore((prev) => prev + 1);
-            }}
-          >
-            Load more
-          </button>
-        </div>
-      )}
-    </div>
+    <>
+      <Tweets tweetSettings={tweetSettings} hookGetTweets={handleHook} />
+    </>
   );
 };
 
